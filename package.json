@@ -1,26 +1,30 @@
 {
-  "name": "elo-league",
-  "type": "module",
-  "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^4.3.4",
-    "vite-tsconfig-paths": "^5.1.4"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "@tanstack/react-router": "^1.115.2",
-    "@tanstack/react-start": "^1.115.2",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "vinxi": "^0.5.4"
-  }
+    "name": "elo-league",
+    "type": "module",
+    "scripts": {
+        "build": "vinxi build",
+        "db": "docker compose up",
+        "dev": "vinxi dev",
+        "prettier": "prettier --write .",
+        "serve": "bun run .output/server/index.mjs"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "@types/react": "^19.1.0",
+        "@types/react-dom": "^19.1.2",
+        "@vitejs/plugin-react": "^4.3.4",
+        "prettier": "3.5.3",
+        "vite-tsconfig-paths": "^5.1.4"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@tanstack/react-router": "^1.115.2",
+        "@tanstack/react-start": "^1.115.2",
+        "kysely": "^0.27.6",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
+        "vinxi": "^0.5.4"
+    }
 }

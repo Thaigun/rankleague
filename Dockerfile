@@ -1,5 +1,5 @@
 FROM oven/bun:alpine
-WORKDIR /app
+WORKDIR /league
 COPY . .
 RUN bun install
 EXPOSE 3000
