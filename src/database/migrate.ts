@@ -8,14 +8,21 @@ class BunMigrationProvider {
 
     async getMigrations() {
         const migrations: Record<string, any> = {};
-        const files = await readdir(this.migrationsPath);
+        console.log(import.meta.dir);
+        const files = await readdir(path.resolve(import.meta.dir, this.migrationsPath));
 
         for (const file of files) {
             if (!file.endsWith('.ts')) continue;
 
             const name = path.parse(file).name;
-            const module = await import(path.join(process.cwd(), this.migrationsPath, file));
-            migrations[name] = module.default;
+            // Fix the import path by using the resolved path instead of process.cwd()
+            const fullPath = path.resolve(import.meta.dir, this.migrationsPath, file);
+            const { up, down } = await import(fullPath);
+
+            migrations[name] = {
+                up,
+                down,
+            };
         }
 
         return migrations;
@@ -58,6 +65,8 @@ switch (command) {
         break;
     }
 }
+
+process.exit(0);
 
 function printMigrationResult(result: MigrationResultSet) {
     console.log('Migration result:', result);
