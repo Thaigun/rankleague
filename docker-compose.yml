@@ -9,6 +9,13 @@ services:
             - '5432:5432'
         volumes:
             - db_data:/var/lib/postgresql/data
+    # dev_data_setup:
+    #     build:
+    #         context: .
+    #         dockerfile: dev-data.Dockerfile
+    #     depends_on:
+    #         - database
+    #     command:
 
 volumes:
     db_data:
