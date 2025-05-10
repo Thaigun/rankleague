@@ -5,7 +5,7 @@ import { Pool } from 'pg';
 const dialect = new PostgresDialect({
     pool: new Pool({
         database: 'league',
-        host: 'localhost',
+        host: process.env.POSTGRES_HOST || 'localhost',
         port: 5432,
         user: 'postgres',
         password: 'postgres',

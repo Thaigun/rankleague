@@ -7,15 +7,21 @@ services:
             POSTGRES_DB: league
         ports:
             - '5432:5432'
-        volumes:
-            - db_data:/var/lib/postgresql/data
-    # dev_data_setup:
-    #     build:
-    #         context: .
-    #         dockerfile: dev-data.Dockerfile
-    #     depends_on:
-    #         - database
-    #     command:
-
-volumes:
-    db_data:
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U postgres -d league']
+            interval: 5s
+            retries: 5
+            start_period: 5s
+            timeout: 10s
+    seed:
+        build:
+            context: .
+            dockerfile: seed.Dockerfile
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: league
+            POSTGRES_HOST: database
+        depends_on:
+            database:
+                condition: service_healthy

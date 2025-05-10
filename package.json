@@ -7,8 +7,8 @@
         "dev": "vinxi dev",
         "migrate": "bun run src/database/migrate.ts",
         "prettier": "prettier --write .",
-        "serve": "bun run .output/server/index.mjs",
-        "setup-dev-data": ""
+        "seed": "bun run src/database/seed.ts",
+        "serve": "bun run .output/server/index.mjs"
     },
     "devDependencies": {
         "@types/bun": "latest",

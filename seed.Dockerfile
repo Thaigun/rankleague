@@ -2,4 +2,4 @@ FROM oven/bun:alpine
 WORKDIR /dev-data
 COPY . .
 RUN bun install
-CMD ["bun", "run", "setup-dev-data"]
+CMD ["bun", "run", "seed"]
