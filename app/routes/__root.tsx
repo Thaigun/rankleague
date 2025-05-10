@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 export const Route = createRootRoute({
     head: () => ({
@@ -21,9 +22,12 @@ export const Route = createRootRoute({
 
 function RootComponent() {
     return (
-        <RootDocument>
-            <Outlet />
-        </RootDocument>
+        <>
+            <RootDocument>
+                <Outlet />
+            </RootDocument>
+            <TanStackRouterDevtools />
+        </>
     );
 }
 
