@@ -1,6 +1,6 @@
 ## Running
 
-`docker compose up` to run the database and seed it with development data. `docker compose down` to reset the database.
+`docker compose up` to run the database and seed it with development data. `docker compose down` to reset the database. `docker compose up --build` in case there are changes in migration code that should be rebuilt.
 
 `bun run dev` to run the development server.
 
