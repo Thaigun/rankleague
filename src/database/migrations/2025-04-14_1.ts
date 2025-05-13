@@ -2,15 +2,6 @@ import { Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
-        .createTable('member')
-        .addColumn('id', 'integer', (col) => col.generatedAlwaysAsIdentity().primaryKey())
-        .addColumn('name', 'varchar', (col) => col.notNull())
-        .addColumn('joined_at', 'timestamp', (col) => col.notNull())
-        .addColumn('league_id', 'varchar', (col) => col.notNull().references('league.id').onDelete('cascade'))
-        .addColumn('is_admin', 'boolean', (col) => col.notNull().defaultTo(false))
-        .execute();
-
-    await db.schema
         .createTable('league')
         .addColumn('id', 'varchar', (col) => col.notNull().primaryKey())
         .addColumn('name', 'varchar', (col) => col.notNull())
@@ -18,6 +9,15 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn('hashed_password', 'varchar', (col) => col.notNull())
         .addColumn('salt', 'varchar', (col) => col.notNull())
         .addColumn('created_at', 'timestamp', (col) => col.notNull())
+        .execute();
+
+    await db.schema
+        .createTable('member')
+        .addColumn('id', 'integer', (col) => col.generatedAlwaysAsIdentity().primaryKey())
+        .addColumn('name', 'varchar', (col) => col.notNull())
+        .addColumn('joined_at', 'timestamp', (col) => col.notNull())
+        .addColumn('league_id', 'varchar', (col) => col.notNull().references('league.id').onDelete('cascade'))
+        .addColumn('is_admin', 'boolean', (col) => col.notNull().defaultTo(false))
         .execute();
 
     await db.schema

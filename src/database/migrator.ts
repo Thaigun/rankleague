@@ -15,7 +15,6 @@ class BunMigrationProvider {
             if (!file.endsWith('.ts')) continue;
 
             const name = path.parse(file).name;
-            // Fix the import path by using the resolved path instead of process.cwd()
             const fullPath = path.resolve(import.meta.dir, this.migrationsPath, file);
             const { up, down } = await import(fullPath);
 
