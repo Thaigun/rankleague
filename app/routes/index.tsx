@@ -1,11 +1,24 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { createFileRoute, useLoaderData, useRouter } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/react-start';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 export const Route = createFileRoute('/')({
     component: Home,
+    loader: () => {
+        return sampleServerFn();
+    },
 });
 
-function Home() {
-    const router = useRouter();
+const sampleServerFn = createServerFn()
+    .middleware([authMiddleware])
+    .handler(async ({ context }) => {
+        return {
+            visit: context.visit,
+        };
+    });
 
-    return <h1 className='text-3xl underline'>Current path was {router.basepath}</h1>;
+function Home() {
+    const loader = Route.useLoaderData();
+
+    return <h1 className='text-3xl underline'>First visit was at {loader.visit}</h1>;
 }
