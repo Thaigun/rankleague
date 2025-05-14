@@ -3,5 +3,7 @@
 @layer base {
     html {
         font-family: 'mono';
+        background-color: var(--color-slate-950);
+        color: var(--color-sky-100);
     }
 }
