@@ -22,14 +22,17 @@
         "typescript": "^5.8.3"
     },
     "dependencies": {
+        "@tailwindcss/vite": "^4.1.6",
         "@tanstack/react-router": "^1.120.2",
         "@tanstack/react-router-devtools": "^1.120.3",
         "@tanstack/react-start": "^1.120.2",
         "@types/pg": "^8.15.1",
         "kysely": "^0.27.6",
         "pg": "^8.15.6",
+        "prettier-plugin-tailwindcss": "^0.6.11",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
+        "tailwindcss": "^4.1.6",
         "vinxi": "^0.5.6"
     }
 }

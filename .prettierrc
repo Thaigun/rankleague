@@ -5,5 +5,7 @@
     "singleQuote": true,
     "printWidth": 110,
     "arrowParens": "always",
-    "jsxSingleQuote": true
+    "jsxSingleQuote": true,
+    "plugins": ["prettier-plugin-tailwindcss"],
+    "tailwindStylesheet": "./app/styles/app.css"
 }

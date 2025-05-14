@@ -7,5 +7,5 @@ export const Route = createFileRoute('/')({
 function Home() {
     const router = useRouter();
 
-    return <h1>Current path was {router.basepath}</h1>;
+    return <h1 className='text-3xl underline'>Current path was {router.basepath}</h1>;
 }
