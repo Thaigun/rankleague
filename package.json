@@ -4,11 +4,11 @@
     "scripts": {
         "build": "vinxi build",
         "db": "docker compose up",
-        "dev": "vinxi dev",
-        "migrate": "bun run src/database/migrate.ts",
+        "dev": "bun --bun vinxi dev",
+        "migrate": "bun run --bun src/database/migrate.ts",
         "prettier": "prettier --write .",
-        "seed": "bun run src/database/seed.ts",
-        "serve": "bun run .output/server/index.mjs"
+        "seed": "bun run --bun src/database/seed.ts",
+        "serve": "bun run --bun .output/server/index.mjs"
     },
     "devDependencies": {
         "@types/bun": "latest",
