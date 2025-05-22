@@ -39,7 +39,6 @@ export function verify(token: string, secret: string): Record<string, any> | nul
     if (parts.length !== 3) return null;
 
     const [encodedHeader, encodedPayload, signature] = parts;
-    if (!encodedHeader || !encodedPayload || !signature) return null;
 
     const expectedSig = hmacSha256(`${encodedHeader}.${encodedPayload}`, secret);
 

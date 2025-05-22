@@ -1,4 +1,4 @@
-import type { GeneratedAlways, Insertable, Selectable, Updateable } from 'kysely';
+import type { GeneratedAlways, Insertable, Selectable, Updateable, ColumnType } from 'kysely';
 
 export interface Database {
     member: MemberTable;
@@ -22,8 +22,7 @@ interface LeagueTable {
     name: string;
     description: string;
     hashed_password: string;
-    salt: string;
-    created_at: string;
+    created_at: ColumnType<Date, never, never>;
 }
 export type League = Selectable<LeagueTable>;
 export type LeagueInsert = Insertable<LeagueTable>;
