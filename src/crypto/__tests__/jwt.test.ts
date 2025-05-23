@@ -4,8 +4,7 @@ import { sign, verify } from '../jwt';
 describe('JWT', () => {
     const secret = 'test-secret';
     const testPayload = {
-        userId: '123',
-        role: 'admin',
+        leagues: ['league1', 'league2'],
     };
 
     test('should correctly sign and verify a token', () => {
@@ -13,8 +12,7 @@ describe('JWT', () => {
         const verified = verify(token, secret);
 
         expect(verified).not.toBeNull();
-        expect(verified?.userId).toBe(testPayload.userId);
-        expect(verified?.role).toBe(testPayload.role);
+        expect(verified?.leagues).toEqual(testPayload.leagues);
         expect(typeof verified?.iat).toBe('number');
         expect(typeof verified?.exp).toBe('number');
     });

@@ -1,3 +1,5 @@
+import { JwtFullPayload, jwtFullPayloadSchema, JwtUserPayload } from './jwtPayload';
+
 function base64Encode(input: string | Uint8Array): string {
     const bitArr = typeof input === 'string' ? new TextEncoder().encode(input) : input;
     return bitArr.toBase64({ alphabet: 'base64url', omitPadding: true });
@@ -14,14 +16,14 @@ function hmacSha256(data: string, secret: string): string {
     return hasher.digest().toBase64({ alphabet: 'base64url', omitPadding: true });
 }
 
-export function sign(payload: Record<string, any>, secret: string, expiresInSec = 3600): string {
+export function sign(payload: JwtUserPayload, secret: string, expiresInSec = 3600): string {
     const header = {
         alg: 'HS256',
         typ: 'JWT',
     };
 
     const now = Math.floor(Date.now() / 1000);
-    const fullPayload = {
+    const fullPayload: JwtFullPayload = {
         ...payload,
         iat: now,
         exp: now + expiresInSec,
@@ -34,7 +36,7 @@ export function sign(payload: Record<string, any>, secret: string, expiresInSec 
     return `${encodedHeader}.${encodedPayload}.${signature}`;
 }
 
-export function verify(token: string, secret: string): Record<string, any> | null {
+export function verify(token: string, secret: string): JwtFullPayload | null {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
 
@@ -45,7 +47,8 @@ export function verify(token: string, secret: string): Record<string, any> | nul
     if (signature !== expectedSig) return null;
 
     try {
-        const payload = JSON.parse(base64Decode(encodedPayload));
+        const rawPayload: unknown = JSON.parse(base64Decode(encodedPayload));
+        const payload = jwtFullPayloadSchema.parse(rawPayload);
         const now = Math.floor(Date.now() / 1000);
         if (payload.exp && now > payload.exp) return null;
         return payload;
