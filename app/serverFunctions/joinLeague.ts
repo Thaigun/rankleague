@@ -18,6 +18,9 @@ export const joinLeagueFn = createServerFn({ method: 'POST' })
         return joinLeagueFnSchema.parse(Object.fromEntries(data.entries()));
     })
     .handler(async ({ data, context }) => {
+        if (context.auth?.leagues?.includes(data.leagueId)) {
+            throw new Error('Already a member of this league');
+        }
         const league = await db
             .selectFrom('league')
             .where('id', '=', data.leagueId)
