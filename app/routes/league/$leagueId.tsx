@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { collectLeagueInfo } from '../../serverFunctions/collectLeagueInfo';
+import { collectLeagueInfo } from '@app/serverFunctions/collectLeagueInfo';
 
 export const Route = createFileRoute('/league/$leagueId')({
     component: League,

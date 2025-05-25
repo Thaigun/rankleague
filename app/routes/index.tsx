@@ -1,11 +1,11 @@
+import { CreateLeagueForm } from '@app/components/forms/CreateLeagueForm';
+import { JoinLeagueForm } from '@app/components/forms/JoinLeagueForm';
+import { JoinedLeagues } from '@app/components/JoinedLeagues';
+import { LogoText } from '@app/components/LogoText';
+import { createLeagueFn } from '@app/serverFunctions/createLeague';
+import { findJoinedLeaguesFn } from '@app/serverFunctions/findJoinedLeagues';
+import { joinLeagueFn } from '@app/serverFunctions/joinLeague';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { JoinedLeagues } from '../components/JoinedLeagues';
-import { LogoText } from '../components/LogoText';
-import { joinLeagueFn } from '../serverFunctions/joinLeague';
-import { createLeagueFn } from '../serverFunctions/createLeague';
-import { findJoinedLeaguesFn } from '../serverFunctions/findJoinedLeagues';
-import { JoinLeagueForm } from '../components/forms/JoinLeagueForm';
-import { CreateLeagueForm } from '../components/forms/CreateLeagueForm';
 
 export const Route = createFileRoute('/')({
     component: Home,

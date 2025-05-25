@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
-import { db } from '../../src/database/db';
-import { authMiddleware } from '../middleware/authMiddleware';
+import { db } from '@src/database/db';
+import { authMiddleware } from '@app/middleware/authMiddleware';
 import { setCookieWithLeagues } from './serverUtils/authTokenUtils';
 
 export const findJoinedLeaguesFn = createServerFn()

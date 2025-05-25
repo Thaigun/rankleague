@@ -1,7 +1,7 @@
 import { createMiddleware } from '@tanstack/react-start';
 import { getCookie } from '@tanstack/react-start/server';
-import { verify } from '../../src/crypto/jwt';
-import { JwtFullPayload } from '../../src/crypto/jwtPayload';
+import { verify } from '@src/crypto/jwt';
+import { JwtFullPayload } from '@src/crypto/jwtPayload';
 
 export const authMiddleware = createMiddleware().server(async ({ next }) => {
     const authCookie = getCookie('auth');
