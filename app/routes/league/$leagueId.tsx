@@ -1,9 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { collectLeagueInfo } from '../../serverFunctions/collectLeagueInfo';
 
 export const Route = createFileRoute('/league/$leagueId')({
     component: League,
+    loader: async ({ params }) => {
+        const leagueId = params.leagueId;
+        return collectLeagueInfo({ data: { leagueId } });
+    },
 });
 
 function League() {
-    return <div>Hello "/league/$leagueId"!</div>;
+    const leagueInfo = Route.useLoaderData();
+
+    return <div>{leagueInfo}</div>;
 }
