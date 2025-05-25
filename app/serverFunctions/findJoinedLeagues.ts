@@ -1,6 +1,7 @@
 import { createServerFn } from '@tanstack/react-start';
-import { authMiddleware } from '../middleware/authMiddleware';
 import { db } from '../../src/database/db';
+import { authMiddleware } from '../middleware/authMiddleware';
+import { setCookieWithLeagues } from './serverUtils/authTokenUtils';
 
 export const findJoinedLeaguesFn = createServerFn()
     .middleware([authMiddleware])
@@ -14,5 +15,9 @@ export const findJoinedLeaguesFn = createServerFn()
             .where('id', 'in', leagueIds)
             .select(['id', 'name', 'description'])
             .execute();
+        if (leagues.length !== leagueIds.length) {
+            const existingLeagues = leagues.map((league) => league.id);
+            setCookieWithLeagues(existingLeagues);
+        }
         return leagues;
     });
