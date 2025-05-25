@@ -4,6 +4,8 @@ import { LogoText } from '../components/LogoText';
 import { joinLeagueFn } from '../serverFunctions/joinLeague';
 import { createLeagueFn } from '../serverFunctions/createLeague';
 import { findJoinedLeaguesFn } from '../serverFunctions/findJoinedLeagues';
+import { JoinLeagueForm } from '../components/forms/JoinLeagueForm';
+import { CreateLeagueForm } from '../components/forms/CreateLeagueForm';
 
 export const Route = createFileRoute('/')({
     component: Home,
@@ -35,36 +37,8 @@ function Home() {
         <div>
             <LogoText />
             <JoinedLeagues leagues={loaderData.leagues} />
-            <form onSubmit={handleJoinLeagueSubmit}>
-                <label>
-                    League ID:
-                    <input name='leagueId' type='text' />
-                </label>
-                <label>
-                    League password:
-                    <input name='leaguePassword' type='password' />
-                </label>
-                <button type='submit'>Join League</button>
-            </form>
-            <form onSubmit={handleCreateLeagueSubmit}>
-                <label>
-                    League unique ID:
-                    <input name='leagueId' type='text' />
-                </label>
-                <label>
-                    League Name:
-                    <input name='leagueName' type='text' />
-                </label>
-                <label>
-                    League description:
-                    <input name='leagueDescription' type='text' />
-                </label>
-                <label>
-                    League password:
-                    <input name='leaguePassword' type='password' />
-                </label>
-                <button type='submit'>Create League</button>
-            </form>
+            <JoinLeagueForm handleJoinLeagueSubmit={handleJoinLeagueSubmit} />
+            <CreateLeagueForm handleCreateLeagueSubmit={handleCreateLeagueSubmit} />
         </div>
     );
 }
