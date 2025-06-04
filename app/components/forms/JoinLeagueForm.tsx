@@ -1,10 +1,10 @@
 interface JoinLeagueFormProps {
-    handleJoinLeagueSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export function JoinLeagueForm(props: JoinLeagueFormProps) {
     return (
-        <form onSubmit={props.handleJoinLeagueSubmit}>
+        <form onSubmit={props.onSubmit}>
             <label>
                 League ID:
                 <input name='leagueId' type='text' />

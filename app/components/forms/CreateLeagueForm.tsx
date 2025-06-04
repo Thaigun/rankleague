@@ -1,10 +1,10 @@
 interface CreateLeagueFormProps {
-    handleCreateLeagueSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export function CreateLeagueForm(props: CreateLeagueFormProps) {
     return (
-        <form onSubmit={props.handleCreateLeagueSubmit}>
+        <form onSubmit={props.onSubmit}>
             <label>
                 League unique ID:
                 <input name='leagueId' type='text' />
