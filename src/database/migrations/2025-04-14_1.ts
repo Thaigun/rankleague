@@ -13,10 +13,9 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable('member')
         .addColumn('id', 'integer', (col) => col.generatedAlwaysAsIdentity().primaryKey())
-        .addColumn('name', 'varchar', (col) => col.notNull())
-        .addColumn('joined_at', 'timestamp', (col) => col.notNull())
+        .addColumn('name', 'varchar', (col) => col.notNull()) // TODO: Make name unique within a league
+        .addColumn('joined_at', 'timestamp', (col) => col.notNull().defaultTo(sql`now()`))
         .addColumn('league_id', 'varchar', (col) => col.notNull().references('league.id').onDelete('cascade'))
-        .addColumn('is_admin', 'boolean', (col) => col.notNull().defaultTo(false))
         .execute();
 
     await db.schema
@@ -30,7 +29,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         .addColumn('member1_score', 'integer', (col) => col.notNull())
         .addColumn('member2_score', 'integer', (col) => col.notNull())
-        .addColumn('datetime', 'timestamp', (col) => col.notNull())
+        .addColumn('datetime', 'timestamp', (col) => col.notNull().defaultTo(sql`now()`))
         .execute();
 }
 

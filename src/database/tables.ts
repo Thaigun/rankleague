@@ -9,9 +9,8 @@ export interface Database {
 interface MemberTable {
     id: GeneratedAlways<number>;
     name: string;
-    joined_at: string;
+    joined_at: ColumnType<Date, never, never>;
     league_id: string;
-    is_admin: boolean;
 }
 export type Member = Selectable<MemberTable>;
 export type MemberInsert = Insertable<MemberTable>;
@@ -22,7 +21,7 @@ interface LeagueTable {
     name: string;
     description: string;
     hashed_password: string;
-    created_at: ColumnType<Date, never, never>;
+    created_at: GeneratedAlways<Date>;
 }
 export type League = Selectable<LeagueTable>;
 export type LeagueInsert = Insertable<LeagueTable>;
@@ -34,7 +33,7 @@ interface MatchTable {
     member2_id: number;
     member1_score: number;
     member2_score: number;
-    datetime: string;
+    datetime: GeneratedAlways<Date>;
 }
 export type Match = Selectable<MatchTable>;
 export type MatchInsert = Insertable<MatchTable>;

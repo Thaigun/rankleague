@@ -3,11 +3,13 @@ import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod/v4';
 import { authMiddleware } from './authMiddleware';
 
-const leagueMembershipMiddlewareSchema = z.object({
-    leagueId: z.string(),
-});
+const leagueMembershipMiddlewareSchema = z
+    .object({
+        leagueId: z.string(),
+    })
+    .catchall(z.unknown());
 
-export const leagueMembershipMiddleware = createMiddleware({})
+export const leagueMembershipMiddleware = createMiddleware()
     .middleware([authMiddleware])
     .validator(zodValidator(leagueMembershipMiddlewareSchema))
     .server(async ({ next, data, context }) => {

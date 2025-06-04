@@ -1,3 +1,4 @@
 import { migrator } from './migrator';
 
-await migrator.migrateToLatest();
+const migrationResult = await migrator.migrateToLatest();
+console.log('Migration result:', migrationResult);
