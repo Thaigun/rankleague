@@ -1,7 +1,8 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { collectLeagueInfo } from '@app/serverFunctions/collectLeagueInfo';
 import { AddLeagueMemberForm } from '@app/components/forms/AddLeagueMemberForm';
 import { addLeagueMemberFn } from '@app/serverFunctions/addLeagueMember';
+import { collectLeagueInfo } from '@app/serverFunctions/collectLeagueInfo';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { z } from 'zod/v4';
 
 export const Route = createFileRoute('/league/$leagueId')({
     component: League,
@@ -22,7 +23,7 @@ function League() {
         await addLeagueMemberFn({
             data: {
                 leagueId: params.leagueId,
-                memberName: formData.get('memberName') as string,
+                memberName: z.string().parse(formData.get('memberName')),
             },
         });
         await router.invalidate();
