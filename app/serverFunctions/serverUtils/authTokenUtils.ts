@@ -1,5 +1,5 @@
 import { setCookie } from '@tanstack/react-start/server';
-import { sign } from '@src/crypto/jwt';
+import { sign } from '@app/utils/crypto/jwt';
 
 export function setCookieWithLeagues(leagueIds: string[]) {
     const secret = process.env.JWT_SECRET;
