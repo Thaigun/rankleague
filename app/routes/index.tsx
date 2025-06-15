@@ -37,8 +37,8 @@ function Home() {
         <div>
             <LogoText />
             <JoinedLeagues leagues={loaderData.leagues} />
-            <JoinLeagueForm onSubmit={handleJoinLeagueSubmit} />
-            <CreateLeagueForm onSubmit={handleCreateLeagueSubmit} />
+            <JoinLeagueForm onSubmit={(e) => void handleJoinLeagueSubmit(e)} />
+            <CreateLeagueForm onSubmit={(e) => void handleCreateLeagueSubmit(e)} />
         </div>
     );
 }

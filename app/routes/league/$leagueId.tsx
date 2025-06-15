@@ -34,7 +34,6 @@ function League() {
     const handleAddMatchSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        console.log(formData);
         await addMatchFn({
             data: {
                 leagueId: params.leagueId,
@@ -60,11 +59,11 @@ function League() {
                         <li key={member.id}>{member.name}</li>
                     ))}
                 </ul>
-                <AddLeagueMemberForm onSubmit={handleAddLeagueMemberSubmit} />
+                <AddLeagueMemberForm onSubmit={(e) => void handleAddLeagueMemberSubmit(e)} />
             </div>
             <div>
                 <h2 className='text-lg'>Matches</h2>
-                <AddMatchForm members={leagueInfo.members} onSubmit={handleAddMatchSubmit} />
+                <AddMatchForm members={leagueInfo.members} onSubmit={(e) => void handleAddMatchSubmit(e)} />
                 <ul>
                     {leagueInfo.matches.map((match) => (
                         <li key={match.match_id}>
