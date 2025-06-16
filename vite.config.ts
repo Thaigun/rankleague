@@ -16,6 +16,7 @@ export default defineConfig({
                 semicolons: true,
                 quoteStyle: 'single',
             },
+            target: 'bun',
         }),
     ],
 });
