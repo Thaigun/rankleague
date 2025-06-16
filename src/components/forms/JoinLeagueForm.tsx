@@ -1,3 +1,5 @@
+import { SubmitButton } from '@src/components/buttons/SubmitButton';
+
 interface JoinLeagueFormProps {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
@@ -13,7 +15,7 @@ export function JoinLeagueForm(props: JoinLeagueFormProps) {
                 League password:
                 <input name='leaguePassword' type='password' />
             </label>
-            <button type='submit'>Join League</button>
+            <SubmitButton>Join League</SubmitButton>
         </form>
     );
 }

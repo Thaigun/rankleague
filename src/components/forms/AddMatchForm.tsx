@@ -1,3 +1,5 @@
+import { SubmitButton } from '@src/components/buttons/SubmitButton';
+
 interface AddMatchFormProps {
     members: { id: number; name: string }[];
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -34,7 +36,7 @@ export function AddMatchForm(props: AddMatchFormProps) {
                 Player 2 Score
                 <input name='member2_score' type='number' required />
             </label>
-            <button type='submit'>Add Match</button>
+            <SubmitButton>Add Match</SubmitButton>
         </form>
     );
 }

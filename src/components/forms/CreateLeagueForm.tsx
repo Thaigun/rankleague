@@ -1,3 +1,5 @@
+import { SubmitButton } from '@src/components/buttons/SubmitButton';
+
 interface CreateLeagueFormProps {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
@@ -21,7 +23,7 @@ export function CreateLeagueForm(props: CreateLeagueFormProps) {
                 League password:
                 <input name='leaguePassword' type='password' />
             </label>
-            <button type='submit'>Create League</button>
+            <SubmitButton>Create League</SubmitButton>
         </form>
     );
 }
