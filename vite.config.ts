@@ -9,9 +9,7 @@ export default defineConfig({
         strictPort: true,
     },
     plugins: [
-        tsConfigPaths({
-            projects: ['./tsconfig.json'],
-        }),
+        tsConfigPaths(),
         tailwindcss(),
         tanstackStart({
             tsr: {

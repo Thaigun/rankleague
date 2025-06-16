@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
-import { leagueMembershipMiddleware } from '@app/middleware/leagueMembershipMiddleware';
-import { db } from '@src/database/db';
+import { leagueMembershipMiddleware } from '@src/middleware/leagueMembershipMiddleware';
+import { db } from '@database/db';
 
 export const collectLeagueInfo = createServerFn()
     .middleware([leagueMembershipMiddleware])

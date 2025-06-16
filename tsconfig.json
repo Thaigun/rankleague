@@ -27,7 +27,7 @@
 
         "paths": {
             "@src/*": ["./src/*"],
-            "@app/*": ["./app/*"]
+            "@database/*": ["./database/*"]
         }
     }
 }

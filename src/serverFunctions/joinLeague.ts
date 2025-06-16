@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start';
 import { z } from 'zod/v4';
-import { db } from '@src/database/db';
-import { authMiddleware } from '@app/middleware/authMiddleware';
+import { db } from '@database/db';
+import { authMiddleware } from '@src/middleware/authMiddleware';
 import { setCookieWithLeagues } from './serverUtils/authTokenUtils';
 
 const joinLeagueFnSchema = z.object({

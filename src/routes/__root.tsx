@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import css from '@app/styles/app.css?url';
+// import css from '@src/styles/app.css?url';
 
 export const Route = createRootRoute({
     head: () => ({
@@ -17,12 +17,12 @@ export const Route = createRootRoute({
                 title: 'Ranklig - Gain bragging rights',
             },
         ],
-        links: [
-            {
-                rel: 'stylesheet',
-                href: css,
-            },
-        ],
+        // links: [
+        //     {
+        //         rel: 'stylesheet',
+        //         href: css,
+        //     },
+        // ],
     }),
     component: RootComponent,
 });

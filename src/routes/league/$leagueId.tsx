@@ -1,8 +1,8 @@
-import { AddLeagueMemberForm } from '@app/components/forms/AddLeagueMemberForm';
-import { AddMatchForm } from '@app/components/forms/AddMatchForm';
-import { addLeagueMemberFn } from '@app/serverFunctions/addLeagueMember';
-import { addMatchFn } from '@app/serverFunctions/addMatch';
-import { collectLeagueInfo } from '@app/serverFunctions/collectLeagueInfo';
+import { AddLeagueMemberForm } from '@src/components/forms/AddLeagueMemberForm';
+import { AddMatchForm } from '@src/components/forms/AddMatchForm';
+import { addLeagueMemberFn } from '@src/serverFunctions/addLeagueMember';
+import { addMatchFn } from '@src/serverFunctions/addMatch';
+import { collectLeagueInfo } from '@src/serverFunctions/collectLeagueInfo';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { z } from 'zod/v4';
 

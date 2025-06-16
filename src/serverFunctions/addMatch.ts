@@ -1,5 +1,5 @@
-import { leagueMembershipMiddleware } from '@app/middleware/leagueMembershipMiddleware';
-import { db } from '@src/database/db';
+import { leagueMembershipMiddleware } from '@src/middleware/leagueMembershipMiddleware';
+import { db } from '@database/db';
 import { createServerFn } from '@tanstack/react-start';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod/v4';

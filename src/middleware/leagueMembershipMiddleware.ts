@@ -9,7 +9,9 @@ const leagueMembershipMiddlewareSchema = z
     })
     .catchall(z.unknown());
 
-export const leagueMembershipMiddleware = createMiddleware()
+export const leagueMembershipMiddleware = createMiddleware({
+    type: 'function',
+})
     .middleware([authMiddleware])
     .validator(zodValidator(leagueMembershipMiddlewareSchema))
     .server(async ({ next, data, context }) => {
