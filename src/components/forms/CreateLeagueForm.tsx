@@ -1,4 +1,6 @@
 import { SubmitButton } from '@src/components/buttons/SubmitButton';
+import { Form, Input, Label } from '@src/components/Form';
+import { FormHeader } from '@src/components/Headers';
 
 interface CreateLeagueFormProps {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -6,24 +8,25 @@ interface CreateLeagueFormProps {
 
 export function CreateLeagueForm(props: CreateLeagueFormProps) {
     return (
-        <form onSubmit={props.onSubmit}>
-            <label>
+        <Form onSubmit={props.onSubmit}>
+            <FormHeader>Create League</FormHeader>
+            <Label>
                 League unique ID:
-                <input name='leagueId' type='text' />
-            </label>
-            <label>
+                <Input name='leagueId' />
+            </Label>
+            <Label>
                 League Name:
-                <input name='leagueName' type='text' />
-            </label>
-            <label>
+                <Input name='leagueName' />
+            </Label>
+            <Label>
                 League description:
-                <input name='leagueDescription' type='text' />
-            </label>
-            <label>
+                <Input name='leagueDescription' />
+            </Label>
+            <Label>
                 League password:
-                <input name='leaguePassword' type='password' />
-            </label>
+                <Input name='leaguePassword' />
+            </Label>
             <SubmitButton>Create League</SubmitButton>
-        </form>
+        </Form>
     );
 }

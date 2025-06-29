@@ -1,4 +1,6 @@
 import { SubmitButton } from '@src/components/buttons/SubmitButton';
+import { Form, Input, Label, Select } from '@src/components/Form';
+import { FormHeader } from '@src/components/Headers';
 
 interface AddMatchFormProps {
     members: { id: number; name: string }[];
@@ -7,36 +9,36 @@ interface AddMatchFormProps {
 
 export function AddMatchForm(props: AddMatchFormProps) {
     return (
-        <form onSubmit={props.onSubmit}>
-            <label>
+        <Form onSubmit={props.onSubmit}>
+            <Label>
                 Player 1
-                <select name='member1_id' required>
+                <Select name='member1_id' required>
                     {props.members.map((member) => (
                         <option key={member.id} value={member.id}>
                             {member.name}
                         </option>
                     ))}
-                </select>
-            </label>
-            <label>
+                </Select>
+            </Label>
+            <Label>
                 Player 2
-                <select name='member2_id' required>
+                <Select name='member2_id' required>
                     {props.members.map((member) => (
                         <option key={member.id} value={member.id}>
                             {member.name}
                         </option>
                     ))}
-                </select>
-            </label>
-            <label>
+                </Select>
+            </Label>
+            <Label>
                 Player 1 Score
-                <input name='member1_score' type='number' required />
-            </label>
-            <label>
+                <Input name='member1_score' type='number' required />
+            </Label>
+            <Label>
                 Player 2 Score
-                <input name='member2_score' type='number' required />
-            </label>
+                <Input name='member2_score' type='number' required />
+            </Label>
             <SubmitButton>Add Match</SubmitButton>
-        </form>
+        </Form>
     );
 }

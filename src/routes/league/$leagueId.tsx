@@ -47,12 +47,12 @@ function League() {
     };
 
     return (
-        <div>
+        <div className='flex flex-col gap-5'>
             <div>
                 <h1 className='text-xl'>{leagueInfo.league.name}</h1>
                 <p>{leagueInfo.league.description}</p>
             </div>
-            <div>
+            <div className='flex flex-col gap-2'>
                 <h2 className='text-lg'>Members</h2>
                 <ul>
                     {leagueInfo.members.map((member) => (
@@ -61,7 +61,7 @@ function League() {
                 </ul>
                 <AddLeagueMemberForm onSubmit={(e) => void handleAddLeagueMemberSubmit(e)} />
             </div>
-            <div>
+            <div className='flex flex-col gap-2'>
                 <h2 className='text-lg'>Matches</h2>
                 <AddMatchForm members={leagueInfo.members} onSubmit={(e) => void handleAddMatchSubmit(e)} />
                 <ul>

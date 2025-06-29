@@ -34,7 +34,7 @@ function Home() {
     };
 
     return (
-        <div>
+        <div className='flex flex-col gap-5'>
             <LogoText />
             <JoinedLeagues leagues={loaderData.leagues} />
             <JoinLeagueForm onSubmit={(e) => void handleJoinLeagueSubmit(e)} />

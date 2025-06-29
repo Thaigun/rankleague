@@ -1,4 +1,5 @@
 import { SubmitButton } from '@src/components/buttons/SubmitButton';
+import { Form, Input, Label } from '@src/components/Form';
 
 interface AddLeagueMemberFormProps {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -6,12 +7,12 @@ interface AddLeagueMemberFormProps {
 
 export function AddLeagueMemberForm(props: AddLeagueMemberFormProps) {
     return (
-        <form onSubmit={props.onSubmit}>
-            <label>
+        <Form onSubmit={props.onSubmit}>
+            <Label>
                 Member Name:
-                <input name='memberName' type='text' required />
-            </label>
+                <Input name='memberName' type='text' />
+            </Label>
             <SubmitButton>Add Member</SubmitButton>
-        </form>
+        </Form>
     );
 }
