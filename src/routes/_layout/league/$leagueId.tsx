@@ -6,7 +6,7 @@ import { collectLeagueInfo } from '@src/serverFunctions/collectLeagueInfo';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { z } from 'zod/v4';
 
-export const Route = createFileRoute('/league/$leagueId')({
+export const Route = createFileRoute('/_layout/league/$leagueId')({
     component: League,
     loader: async ({ params }) => {
         const leagueId = params.leagueId;

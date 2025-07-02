@@ -1,13 +1,12 @@
 import { CreateLeagueForm } from '@src/components/forms/CreateLeagueForm';
 import { JoinLeagueForm } from '@src/components/forms/JoinLeagueForm';
 import { JoinedLeagues } from '@src/components/JoinedLeagues';
-import { LogoText } from '@src/components/LogoText';
 import { createLeagueFn } from '@src/serverFunctions/createLeague';
 import { findJoinedLeaguesFn } from '@src/serverFunctions/findJoinedLeagues';
 import { joinLeagueFn } from '@src/serverFunctions/joinLeague';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_layout/')({
     component: Home,
     loader: async () => {
         const leagues = await findJoinedLeaguesFn();
@@ -35,7 +34,6 @@ function Home() {
 
     return (
         <div className='flex flex-col gap-5'>
-            <LogoText />
             <JoinedLeagues leagues={loaderData.leagues} />
             <JoinLeagueForm onSubmit={(e) => void handleJoinLeagueSubmit(e)} />
             <CreateLeagueForm onSubmit={(e) => void handleCreateLeagueSubmit(e)} />

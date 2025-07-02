@@ -9,68 +9,92 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root';
-import { Route as IndexRouteImport } from './routes/index';
-import { Route as LeagueLeagueIdRouteImport } from './routes/league/$leagueId';
+import { Route as LayoutRouteImport } from './routes/_layout';
+import { Route as LayoutIndexRouteImport } from './routes/_layout/index';
+import { Route as LayoutLeagueLeagueIdRouteImport } from './routes/_layout/league/$leagueId';
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const LayoutRoute = LayoutRouteImport.update({
+  id: '/_layout',
   getParentRoute: () => rootRouteImport,
 } as any);
-const LeagueLeagueIdRoute = LeagueLeagueIdRouteImport.update({
+const LayoutIndexRoute = LayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutRoute,
+} as any);
+const LayoutLeagueLeagueIdRoute = LayoutLeagueLeagueIdRouteImport.update({
   id: '/league/$leagueId',
   path: '/league/$leagueId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/league/$leagueId': typeof LeagueLeagueIdRoute;
+  '/': typeof LayoutIndexRoute;
+  '/league/$leagueId': typeof LayoutLeagueLeagueIdRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/league/$leagueId': typeof LeagueLeagueIdRoute;
+  '/': typeof LayoutIndexRoute;
+  '/league/$leagueId': typeof LayoutLeagueLeagueIdRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
-  '/': typeof IndexRoute;
-  '/league/$leagueId': typeof LeagueLeagueIdRoute;
+  '/_layout': typeof LayoutRouteWithChildren;
+  '/_layout/': typeof LayoutIndexRoute;
+  '/_layout/league/$leagueId': typeof LayoutLeagueLeagueIdRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths: '/' | '/league/$leagueId';
   fileRoutesByTo: FileRoutesByTo;
   to: '/' | '/league/$leagueId';
-  id: '__root__' | '/' | '/league/$leagueId';
+  id: '__root__' | '/_layout' | '/_layout/' | '/_layout/league/$leagueId';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  LeagueLeagueIdRoute: typeof LeagueLeagueIdRoute;
+  LayoutRoute: typeof LayoutRouteWithChildren;
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexRouteImport;
+    '/_layout': {
+      id: '/_layout';
+      path: '';
+      fullPath: '';
+      preLoaderRoute: typeof LayoutRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    '/league/$leagueId': {
-      id: '/league/$leagueId';
+    '/_layout/': {
+      id: '/_layout/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof LayoutIndexRouteImport;
+      parentRoute: typeof LayoutRoute;
+    };
+    '/_layout/league/$leagueId': {
+      id: '/_layout/league/$leagueId';
       path: '/league/$leagueId';
       fullPath: '/league/$leagueId';
-      preLoaderRoute: typeof LeagueLeagueIdRouteImport;
-      parentRoute: typeof rootRouteImport;
+      preLoaderRoute: typeof LayoutLeagueLeagueIdRouteImport;
+      parentRoute: typeof LayoutRoute;
     };
   }
 }
 
+interface LayoutRouteChildren {
+  LayoutIndexRoute: typeof LayoutIndexRoute;
+  LayoutLeagueLeagueIdRoute: typeof LayoutLeagueLeagueIdRoute;
+}
+
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutIndexRoute: LayoutIndexRoute,
+  LayoutLeagueLeagueIdRoute: LayoutLeagueLeagueIdRoute,
+};
+
+const LayoutRouteWithChildren =
+  LayoutRoute._addFileChildren(LayoutRouteChildren);
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  LeagueLeagueIdRoute: LeagueLeagueIdRoute,
+  LayoutRoute: LayoutRouteWithChildren,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
