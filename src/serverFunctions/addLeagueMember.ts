@@ -11,7 +11,7 @@ const addLeagueMemberSchema = z.object({
 
 export const addLeagueMemberFn = createServerFn({ method: 'POST' })
     .middleware([leagueMembershipMiddleware])
-    .validator(zodValidator(addLeagueMemberSchema))
+    .inputValidator(zodValidator(addLeagueMemberSchema))
     .handler(async ({ data }) => {
         const { memberName, leagueId } = data;
         const newMember = await db

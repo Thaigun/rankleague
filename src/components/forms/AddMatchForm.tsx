@@ -1,6 +1,5 @@
 import { SubmitButton } from '@src/components/buttons/SubmitButton';
 import { Form, Input, Label, Select } from '@src/components/Form';
-import { FormHeader } from '@src/components/Headers';
 
 interface AddMatchFormProps {
     members: { id: number; name: string }[];

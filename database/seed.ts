@@ -17,8 +17,8 @@ if (!existingLeagues.find((league) => league.id === 'test1')) {
         .execute();
     console.log('Inserted test league:', insertResult);
 }
-const existingMembers = await db.selectFrom('member').where('league_id', '=', 'test1').select('id').execute();
 
+const existingMembers = await db.selectFrom('member').where('league_id', '=', 'test1').select('id').execute();
 if (existingMembers.length === 0) {
     const insertResult = await db
         .insertInto('member')

@@ -13,7 +13,7 @@ export const leagueMembershipMiddleware = createMiddleware({
     type: 'function',
 })
     .middleware([authMiddleware])
-    .validator(zodValidator(leagueMembershipMiddlewareSchema))
+    .inputValidator(zodValidator(leagueMembershipMiddlewareSchema))
     .server(async ({ next, data, context }) => {
         if (!context.auth?.leagues.includes(data.leagueId)) {
             throw new Error('Not a member of this league');

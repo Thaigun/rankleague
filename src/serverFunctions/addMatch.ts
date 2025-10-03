@@ -13,7 +13,7 @@ const addMatchFnSchema = z.object({
 
 export const addMatchFn = createServerFn({ method: 'POST' })
     .middleware([leagueMembershipMiddleware])
-    .validator(zodValidator(addMatchFnSchema))
+    .inputValidator(zodValidator(addMatchFnSchema))
     .handler(async ({ data }) => {
         const { member1_id, member2_id, member1_score, member2_score } = data;
 

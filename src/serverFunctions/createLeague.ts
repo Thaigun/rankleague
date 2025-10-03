@@ -13,7 +13,7 @@ const createLeagueFnSchema = z.object({
 
 export const createLeagueFn = createServerFn({ method: 'POST' })
     .middleware([authMiddleware])
-    .validator((data) => {
+    .inputValidator((data) => {
         if (!(data instanceof FormData)) {
             throw new Error('FormData is required');
         }

@@ -8,11 +8,11 @@
 
 The app is meant for private leagues with friends, families, companies etc. Because the app cannot enforce correct results and it's meant for organic, un-administered use, everyone who has an access to a league can also record any results in there.
 
-The front page of the application also is the dashboard. If the user has not joined any leagues, it shows an empty list and explains the basics. There are to actions they can take: create a league or join a league.
+The front page of the application also is the dashboard. If the user has not joined any leagues, it shows an empty list and explains the basics. There are two actions they can take: create a league or join a league.
 
 ## Creating a league
 
-When the user creates a league, they have to pass a captcha, we ask for the name of the league, the url (unique name) they'd like to have for it and a password for the league. After submitting, the league will be created and added on the front page of joined leagues. We will not redirect to the league page automatically, to demonstrate where new leagues will appear.
+When the user creates a league, they have to pass a captcha, we ask for the name of the league, the url (unique name) they'd like to have for it and a password for the league. After submitting, the league will be created and added on their front page of joined leagues. We will not redirect to the league page automatically, to demonstrate where new leagues will appear.
 
 ## Joining a league
 
@@ -33,6 +33,6 @@ The league page has the following affordances.
 
 ## ELO ratings
 
-I'm considering keeping the members' ELO rating directly on the server memory for instant access and easy algorithm tweaks. When the server stats, it would have to fetch all matches from the database in order to calculate the ELO ratings. This is an interesting architectural option and we could also keep track of win, draw and loss counts in the same manner. And also, the ELO changes for each player in each match are probably nice to show in the UI.
+I'm considering keeping the members' ELO rating directly on the server memory for instant access and easy algorithm tweaks. When the server starts, it would have to fetch all matches from the database in order to calculate the ELO ratings. This is an interesting architectural option and we could also keep track of win, draw and loss counts in the same manner. And also, the ELO changes for each player in each match are probably nice to show in the UI.
 
 Alternatively, we store these data in database in a traditional way.
