@@ -33,7 +33,7 @@ function Home() {
     };
 
     return (
-        <div className='flex flex-col gap-5'>
+        <div className='flex flex-col gap-10'>
             <JoinedLeagues leagues={loaderData.leagues} />
             <JoinLeagueForm onSubmit={(e) => void handleJoinLeagueSubmit(e)} />
             <CreateLeagueForm onSubmit={(e) => void handleCreateLeagueSubmit(e)} />

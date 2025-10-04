@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_layout')({
 function RouteComponent() {
     return (
         <div className='flex flex-col gap-5'>
-            <div className='self-start'>
+            <div className='self-start py-5'>
                 <LogoText />
             </div>
             <Outlet />
