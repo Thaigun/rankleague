@@ -3,6 +3,7 @@
     "type": "module",
     "scripts": {
         "build": "bun --bun vite build",
+        "check": "bun run typecheck && bun run prettier && bun run lint",
         "db": "docker compose up",
         "dev": "bun --bun vite dev",
         "lint": "bun --bun eslint . --fix",

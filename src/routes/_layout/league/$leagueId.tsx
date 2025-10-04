@@ -4,7 +4,6 @@ import { addLeagueMemberFn } from '@src/serverFunctions/addLeagueMember';
 import { addMatchFn } from '@src/serverFunctions/addMatch';
 import { collectLeagueInfo } from '@src/serverFunctions/collectLeagueInfo';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
-import { z } from 'zod/v4';
 
 export const Route = createFileRoute('/_layout/league/$leagueId')({
     component: League,

@@ -4,7 +4,7 @@ import { FormHeader } from '@src/components/Headers';
 import { FormEvent, useState } from 'react';
 
 interface JoinLeagueFormProps {
-    onSubmit: (data: { leagueId: string; leaguePassword: string }) => void;
+    onSubmit: (data: { leagueId: string; leaguePassword: string }) => void | Promise<void>;
 }
 
 export function JoinLeagueForm(props: JoinLeagueFormProps) {
@@ -13,7 +13,7 @@ export function JoinLeagueForm(props: JoinLeagueFormProps) {
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        props.onSubmit({
+        void props.onSubmit({
             leagueId,
             leaguePassword,
         });
