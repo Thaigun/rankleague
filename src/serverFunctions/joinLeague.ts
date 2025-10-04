@@ -3,6 +3,7 @@ import { z } from 'zod/v4';
 import { db } from '@database/db';
 import { authMiddleware } from '@src/middleware/authMiddleware';
 import { setCookieWithLeagues } from './serverUtils/authTokenUtils';
+import { zodValidator } from '@tanstack/zod-adapter';
 
 const joinLeagueFnSchema = z.object({
     leagueId: z.string(),
@@ -11,12 +12,7 @@ const joinLeagueFnSchema = z.object({
 
 export const joinLeagueFn = createServerFn({ method: 'POST' })
     .middleware([authMiddleware])
-    .inputValidator((data) => {
-        if (!(data instanceof FormData)) {
-            throw new Error('FormData is required');
-        }
-        return joinLeagueFnSchema.parse(Object.fromEntries(data.entries()));
-    })
+    .inputValidator(zodValidator(joinLeagueFnSchema))
     .handler(async ({ data, context }) => {
         if (context.auth?.leagues?.includes(data.leagueId)) {
             throw new Error('Already a member of this league');

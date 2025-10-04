@@ -19,28 +19,26 @@ function League() {
     const router = useRouter();
     const params = Route.useParams();
 
-    const handleAddLeagueMemberSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
+    const handleAddLeagueMemberSubmit = async (data: { memberName: string }) => {
         await addLeagueMemberFn({
             data: {
                 leagueId: params.leagueId,
-                memberName: z.string().parse(formData.get('memberName')),
+                ...data,
             },
         });
         await router.invalidate();
     };
 
-    const handleAddMatchSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
+    const handleAddMatchSubmit = async (data: {
+        member1Id: number;
+        member2Id: number;
+        member1Score: number;
+        member2Score: number;
+    }) => {
         await addMatchFn({
             data: {
                 leagueId: params.leagueId,
-                member1_id: parseInt(z.string().parse(formData.get('member1_id'))),
-                member2_id: parseInt(z.string().parse(formData.get('member2_id'))),
-                member1_score: parseInt(z.string().parse(formData.get('member1_score'))),
-                member2_score: parseInt(z.string().parse(formData.get('member2_score'))),
+                ...data,
             },
         });
         await router.invalidate();
@@ -59,11 +57,13 @@ function League() {
                         <li key={member.id}>{member.name}</li>
                     ))}
                 </ul>
-                <AddLeagueMemberForm onSubmit={(e) => void handleAddLeagueMemberSubmit(e)} />
+                <AddLeagueMemberForm onSubmit={handleAddLeagueMemberSubmit} />
             </div>
             <div className='flex flex-col gap-2'>
                 <h2 className='text-lg'>Matches</h2>
-                <AddMatchForm members={leagueInfo.members} onSubmit={(e) => void handleAddMatchSubmit(e)} />
+                {leagueInfo.members.length > 1 && (
+                    <AddMatchForm members={leagueInfo.members} onSubmit={handleAddMatchSubmit} />
+                )}
                 <ul>
                     {leagueInfo.matches.map((match) => (
                         <li key={match.match_id}>

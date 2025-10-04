@@ -18,25 +18,26 @@ function Home() {
     const loaderData = Route.useLoaderData();
     const router = useRouter();
 
-    const handleJoinLeagueSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        await joinLeagueFn({ data: formData });
+    const handleJoinLeagueSubmit = async (data: { leagueId: string; leaguePassword: string }) => {
+        await joinLeagueFn({ data });
         await router.invalidate();
     };
 
-    const handleCreateLeagueSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        await createLeagueFn({ data: formData });
+    const handleCreateLeagueSubmit = async (data: {
+        leagueId: string;
+        leagueName: string;
+        leagueDescription: string;
+        leaguePassword: string;
+    }) => {
+        await createLeagueFn({ data });
         await router.invalidate();
     };
 
     return (
         <div className='flex flex-col gap-10'>
             <JoinedLeagues leagues={loaderData.leagues} />
-            <JoinLeagueForm onSubmit={(e) => void handleJoinLeagueSubmit(e)} />
-            <CreateLeagueForm onSubmit={(e) => void handleCreateLeagueSubmit(e)} />
+            <JoinLeagueForm onSubmit={handleJoinLeagueSubmit} />
+            <CreateLeagueForm onSubmit={handleCreateLeagueSubmit} />
         </div>
     );
 }

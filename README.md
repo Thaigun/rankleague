@@ -36,3 +36,7 @@ The league page has the following affordances.
 I'm considering keeping the members' ELO rating directly on the server memory for instant access and easy algorithm tweaks. When the server starts, it would have to fetch all matches from the database in order to calculate the ELO ratings. This is an interesting architectural option and we could also keep track of win, draw and loss counts in the same manner. And also, the ELO changes for each player in each match are probably nice to show in the UI.
 
 Alternatively, we store these data in database in a traditional way.
+
+## Forms
+
+While uncontrolled html form components are elegant and leverage browser's built-in features, they would need using refs to clean form data after submit. I dislike refs more than I dislike controlled components, which is why the form are (will be) controlled.
