@@ -82,6 +82,9 @@ function calculateV(mu: number, opponents: Glicko2PlayerData[]) {
         const ERes = E(mu, opponent.mu, opponent.phi);
         sum += gRes * gRes * ERes * (1 - ERes);
     }
+    if (sum === 0) {
+        return Number.MAX_VALUE;
+    }
     return 1 / sum;
 }
 
