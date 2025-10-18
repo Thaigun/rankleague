@@ -40,3 +40,11 @@ Alternatively, we store these data in database in a traditional way.
 ## Forms
 
 While uncontrolled html form components are elegant and leverage browser's built-in features, they would need using refs to clean form data after submit. I dislike refs more than I dislike controlled components, which is why the form are (will be) controlled.
+
+## Updating match data
+
+It's nice to be able to edit scores and delete games if they were accidentally added. Maybe both of the players added the match so it was duplicated.
+
+However, the score of the game affects the player ratings which affect the ratings of the game that come after them. So whenever a match winner is changed or a game is deleted, all matches that come after it must be re-applied. But then you need to know what the player ratings and rating confidence were before the match. Options are to apply all matches from the beginning of time in the league or to save those statistics in every match (might be nice for UI anyway) or to backtrack the rating starting from the latest game. Backtracking seems like it may get complicated. Saving the rating data in every match row seems like the best option.
+
+When doing updates or delete operations, the players should be warned that it will affect the ratings of other matches too. The database must be sufficiently locked with a mutex or a transaction to make sure no other matches are recorded while some matches are re-applied.
