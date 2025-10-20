@@ -1,4 +1,7 @@
 const tau = 0.5;
+const maxDeviation = 500;
+const minDeviation = 30;
+const maxVolatility = 0.1;
 
 export function calculateRatingDeviation(
     ratingDeviation: number,
@@ -21,6 +24,17 @@ interface Glicko2PlayerData {
     phi: number;
 }
 
+export function expectedScore(
+    player1: { rating: number; ratingDeviation: number },
+    player2: { rating: number; ratingDeviation: number },
+): number {
+    const mu1 = ratingToGlicko2Scale(player1.rating);
+    const phi1 = ratingDeviationToGlicko2Scale(player1.ratingDeviation);
+    const mu2 = ratingToGlicko2Scale(player2.rating);
+    const phi2 = ratingDeviationToGlicko2Scale(player2.ratingDeviation);
+    return E(mu1, mu2, phi2);
+}
+
 // https://glicko.net/glicko/glicko2.pdf
 export function calculateGlicko2Rating(
     player: PlayerRatingData,
@@ -36,26 +50,26 @@ export function calculateGlicko2Rating(
         phi: ratingDeviationToGlicko2Scale(opp.ratingDeviation),
     }));
 
-    // Step 3
+    // Step 3, how much information the results provide
     const v = calculateV(mu, convertedOpponents);
 
-    // Step 4
+    // Step 4, difference between expected and actual performance
     const delta = calculateDelta(v, mu, convertedOpponents, scores);
 
     // Step 5
     const newSigma = iterateVolatility(player.volatility, phi, delta, v);
 
-    // Step 6
+    // Step 6, what the player's new rating deviation would be if they had not competed
     const phiStar = calculatePhiStar(phi, newSigma, ratingPeriods);
 
-    // Step 7
+    // Step 7, rating deviation after seeing results and new rating
     const newPhi = calculateNewPhi(phiStar, v);
     const newMu = calculateNewMu(mu, newPhi, convertedOpponents, scores);
 
     return {
         rating: ratingFromGlicko2Scale(newMu),
-        ratingDeviation: ratingDeviationFromGlicko2Scale(newPhi),
-        volatility: newSigma,
+        ratingDeviation: clamp(ratingDeviationFromGlicko2Scale(newPhi), minDeviation, maxDeviation),
+        volatility: clamp(newSigma, 0, maxVolatility),
     };
 }
 
@@ -173,4 +187,8 @@ function calculateNewMu(mu: number, newPhi: number, opponents: Glicko2PlayerData
         sum += g(opponent.phi) * (score - E(mu, opponent.mu, opponent.phi));
     }
     return mu + newPhi * newPhi * sum;
+}
+
+function clamp(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
 }

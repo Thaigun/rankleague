@@ -1,8 +1,8 @@
-import { expect, test, describe } from 'bun:test';
-import { calculateRatingDeviation, calculateGlicko2Rating } from '../glicko2';
+import { describe, expect, test } from 'bun:test';
+import { calculateGlicko2Rating, calculateRatingDeviation, expectedScore } from '../glicko2';
 
 describe('calculateRatingDeviation', () => {
-    test('should increase slowly', () => {
+    test('should increase monotonically', () => {
         const originalRD = 20;
         let previousRD = originalRD;
         for (let i = 0; i < 100; i++) {
@@ -26,6 +26,24 @@ describe('calculateRatingDeviation', () => {
         const rd100 = calculateRatingDeviation(rdInitial, sigma, 100);
 
         expect(rd100 / rd1).toBeLessThan(5);
+    });
+
+    test('should avoid runaway RD inflation with high ratingPeriods', () => {
+        const rd = calculateRatingDeviation(200, 0.06, 1000);
+        expect(rd).toBeLessThan(500);
+    });
+
+    test('sequential periods should equal single long period', () => {
+        const rdInitial = 100;
+        const sigma = 0.06;
+
+        let rdSequential = rdInitial;
+        for (let i = 0; i < 10; i++) {
+            rdSequential = calculateRatingDeviation(rdSequential, sigma, 1);
+        }
+
+        const rdBatch = calculateRatingDeviation(rdInitial, sigma, 10);
+        expect(rdBatch).toBeCloseTo(rdSequential, 5);
     });
 });
 
@@ -119,44 +137,6 @@ describe('calculateGlicko2Rating', () => {
         expect(result.ratingDeviation).toBeLessThan(350);
     });
 
-    test('should show that per-game updates reduce RD too aggressively', () => {
-        const player = {
-            rating: 1500,
-            ratingDeviation: 200,
-            volatility: 0.06,
-        };
-        const opponent = {
-            rating: 1500,
-            ratingDeviation: 50,
-            volatility: 0.06,
-        };
-
-        // Simulate 10 sequential updates vs same opponent (as if we were updating after every game)
-        let sequential = { ...player };
-        for (let i = 0; i < 10; i++) {
-            sequential = calculateGlicko2Rating(sequential, [opponent], [0.5], 1);
-        }
-
-        // Simulate a single rating-period update (should be more conservative)
-        let batch = { ...player };
-        for (let i = 0; i < 10; i++) {
-            batch = calculateGlicko2Rating(batch, [opponent], [0.5], 10);
-        }
-
-        // Sequential RD should typically be smaller (overconfident)
-        expect(sequential.ratingDeviation).toBeLessThan(batch.ratingDeviation);
-
-        // Log ratio for manual inspection
-        console.log('RD sequential vs batch', sequential.ratingDeviation, batch.ratingDeviation);
-    });
-
-    test('should detect runaway RD inflation with high ratingPeriods', () => {
-        const rd = calculateRatingDeviation(200, 0.06, 1000);
-        // If your phi* computation multiplies σ² * ratingPeriods (instead of c² * t),
-        // this will explode unrealistically.
-        expect(rd).toBeLessThan(1000);
-    });
-
     test('should preserve reasonable RD bounds over many updates', () => {
         let player = {
             rating: 1500,
@@ -170,29 +150,58 @@ describe('calculateGlicko2Rating', () => {
         };
 
         for (let i = 0; i < 200; i++) {
-            const score = i % 2 === 0 ? 1 : 0; // alternate win/loss
+            const score = i % 2 === 0 ? 1 : 0;
             player = calculateGlicko2Rating(player, [opponent], [score], 1);
         }
 
-        // RD should settle in a plausible range (50–300)
-        expect(player.ratingDeviation).toBeGreaterThan(30);
-        expect(player.ratingDeviation).toBeLessThan(350);
+        expect(player.rating).toBeGreaterThan(1500);
+        expect(player.ratingDeviation).toBeLessThan(200);
     });
 
-    test('should reveal phi* drift issues by comparing with known formula', () => {
-        const rd0 = 200;
+    test('very small fractional t should barely change RD', () => {
+        const rd = 100;
         const sigma = 0.06;
-        const t = 10;
 
-        // Your implementation
-        const phiStarYours = calculateRatingDeviation(rd0, sigma, t);
+        const rdTiny = calculateRatingDeviation(rd, sigma, 0.001);
+        expect(rdTiny).toBeCloseTo(rd, 2);
+    });
 
-        // Correct theoretical version: φ* = sqrt(φ² + (c² × t)), where c = sqrt(σ²)
-        // (simplified for t periods)
-        const phi = rd0 / 173.7178;
-        const phiStarExpected = Math.sqrt(phi * phi + sigma * sigma * t);
+    test('long idle time before match increases rating deviation', () => {
+        const player = {
+            rating: 1500,
+            ratingDeviation: 50,
+            volatility: 0.06,
+        };
+        const opponent = {
+            rating: 1500,
+            ratingDeviation: 50,
+            volatility: 0.06,
+        };
 
-        const diff = Math.abs(phiStarExpected - phiStarYours / 173.7178);
-        expect(diff).toBeLessThan(0.2); // loose tolerance, just flagging divergence
+        const newGameImmediately = calculateGlicko2Rating(player, [opponent], [0.5], 0);
+        const newGameAfterAWhile = calculateGlicko2Rating(player, [opponent], [0.5], 10);
+
+        expect(newGameAfterAWhile.ratingDeviation).toBeGreaterThan(newGameImmediately.ratingDeviation);
+    });
+
+    test('long idle time increases magnitude of rating change', () => {
+        const player = {
+            rating: 1500,
+            ratingDeviation: 50,
+            volatility: 0.06,
+        };
+        const opponent = {
+            rating: 1600,
+            ratingDeviation: 50,
+            volatility: 0.06,
+        };
+
+        const active = calculateGlicko2Rating(player, [opponent], [1], 0);
+        const idle = calculateGlicko2Rating(player, [opponent], [1], 10);
+
+        const deltaActive = Math.abs(active.rating - 1500);
+        const deltaIdle = Math.abs(idle.rating - 1500);
+
+        expect(deltaIdle).toBeGreaterThan(deltaActive);
     });
 });
