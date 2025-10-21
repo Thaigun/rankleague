@@ -1,29 +1,19 @@
+import type { Glicko2PlayerData, PlayerRatingData } from './glicko2PlayerData';
+
 const tau = 0.5;
 const maxDeviation = 500;
 const minDeviation = 30;
 const maxVolatility = 0.1;
 const epsilon = 0.000001;
-const c = 0.02;
 
 export function calculateRatingDeviation(
     ratingDeviation: number,
-    volatility: number,
+    changeRate: number,
     ratingPeriods: number,
 ): number {
     const phi = ratingDeviationToGlicko2Scale(ratingDeviation);
-    const phiStar = inflateRatingDeviation(phi, volatility, ratingPeriods);
+    const phiStar = inflateRatingDeviation(phi, changeRate, ratingPeriods);
     return ratingDeviationFromGlicko2Scale(phiStar);
-}
-
-interface PlayerRatingData {
-    rating: number;
-    ratingDeviation: number;
-    volatility: number;
-}
-
-interface Glicko2PlayerData {
-    mu: number;
-    phi: number;
 }
 
 export function expectedScore(

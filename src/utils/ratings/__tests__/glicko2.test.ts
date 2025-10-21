@@ -20,10 +20,9 @@ describe('calculateRatingDeviation', () => {
 
     test('should not inflate RD unrealistically fast for long inactivity', () => {
         const rdInitial = 50;
-        const sigma = 0.06;
 
-        const rd1 = calculateRatingDeviation(rdInitial, sigma, 1);
-        const rd100 = calculateRatingDeviation(rdInitial, sigma, 100);
+        const rd1 = calculateRatingDeviation(rdInitial, 0.06, 1);
+        const rd100 = calculateRatingDeviation(rdInitial, 0.06, 100);
 
         expect(rd100 / rd1).toBeLessThan(5);
     });
@@ -35,14 +34,13 @@ describe('calculateRatingDeviation', () => {
 
     test('sequential periods should equal single long period', () => {
         const rdInitial = 100;
-        const sigma = 0.06;
 
         let rdSequential = rdInitial;
         for (let i = 0; i < 10; i++) {
-            rdSequential = calculateRatingDeviation(rdSequential, sigma, 1);
+            rdSequential = calculateRatingDeviation(rdSequential, 0.06, 1);
         }
 
-        const rdBatch = calculateRatingDeviation(rdInitial, sigma, 10);
+        const rdBatch = calculateRatingDeviation(rdInitial, 0.06, 10);
         expect(rdBatch).toBeCloseTo(rdSequential, 5);
     });
 });
