@@ -1,4 +1,4 @@
-import type { GeneratedAlways, Insertable, Selectable, Updateable, ColumnType } from 'kysely';
+import type { GeneratedAlways, Insertable, Selectable, Updateable, ColumnType, Generated } from 'kysely';
 
 export interface Database {
     member: MemberTable;
@@ -11,6 +11,9 @@ interface MemberTable {
     name: string;
     joined_at: ColumnType<Date, never, never>;
     league_id: string;
+    glicko2_rating: Generated<number>;
+    glicko2_rating_deviation: Generated<number>;
+    glicko2_volatility: Generated<number>;
 }
 export type Member = Selectable<MemberTable>;
 export type MemberInsert = Insertable<MemberTable>;
