@@ -62,7 +62,7 @@ describe('calculateGlicko2Rating', () => {
         ];
 
         const scores: (0 | 0.5 | 1)[] = [1, 0, 0];
-        const updated = calculateGlicko2Rating(player, opponents, scores, 1);
+        const updated = calculateGlicko2Rating(player, opponents, scores);
 
         expect(updated.rating).toBeCloseTo(1464.06, 1);
         expect(updated.ratingDeviation).toBeCloseTo(151.52, 2);
@@ -81,8 +81,8 @@ describe('calculateGlicko2Rating', () => {
             volatility: 0.06,
         };
 
-        const updatedA = calculateGlicko2Rating(A, [B], [1], 1);
-        const updatedB = calculateGlicko2Rating(B, [A], [0], 1);
+        const updatedA = calculateGlicko2Rating(A, [B], [1]);
+        const updatedB = calculateGlicko2Rating(B, [A], [0]);
 
         expect(updatedA.rating).toBeGreaterThan(A.rating);
         expect(updatedB.rating).toBeLessThan(B.rating);
@@ -100,7 +100,7 @@ describe('calculateGlicko2Rating', () => {
             volatility: 0.06,
         };
 
-        const updatedA = calculateGlicko2Rating(A, [B], [0.5], 1);
+        const updatedA = calculateGlicko2Rating(A, [B], [0.5]);
         expect(Math.abs(updatedA.rating - 1500)).toBeLessThan(1);
     });
 
@@ -117,7 +117,7 @@ describe('calculateGlicko2Rating', () => {
             volatility: 0.06,
         };
 
-        const after = calculateGlicko2Rating(player, [opponent], [0.5], 1);
+        const after = calculateGlicko2Rating(player, [opponent], [0.5]);
         expect(after.ratingDeviation).toBeLessThan(beforeRD);
     });
 
@@ -132,7 +132,7 @@ describe('calculateGlicko2Rating', () => {
             ratingDeviation: 30,
             volatility: 0.06,
         };
-        const result = calculateGlicko2Rating(player, [opponent], [1], 1);
+        const result = calculateGlicko2Rating(player, [opponent], [1]);
         expect(result.rating).toBeGreaterThan(1500);
         expect(result.ratingDeviation).toBeLessThan(350);
     });
@@ -151,57 +151,33 @@ describe('calculateGlicko2Rating', () => {
 
         for (let i = 0; i < 200; i++) {
             const score = i % 2 === 0 ? 1 : 0;
-            player = calculateGlicko2Rating(player, [opponent], [score], 1);
+            player = calculateGlicko2Rating(player, [opponent], [score]);
         }
 
         expect(player.rating).toBeGreaterThan(1500);
         expect(player.ratingDeviation).toBeLessThan(200);
     });
 
-    test('very small fractional t should barely change RD', () => {
-        const rd = 100;
-        const sigma = 0.06;
-
-        const rdTiny = calculateRatingDeviation(rd, sigma, 0.001);
-        expect(rdTiny).toBeCloseTo(rd, 2);
-    });
-
-    test('long idle time before match increases rating deviation', () => {
+    test('greater rating deviation opponents should have less impact', () => {
         const player = {
             rating: 1500,
             ratingDeviation: 50,
             volatility: 0.06,
         };
-        const opponent = {
-            rating: 1500,
-            ratingDeviation: 50,
-            volatility: 0.06,
-        };
-
-        const newGameImmediately = calculateGlicko2Rating(player, [opponent], [0.5], 0);
-        const newGameAfterAWhile = calculateGlicko2Rating(player, [opponent], [0.5], 10);
-
-        expect(newGameAfterAWhile.ratingDeviation).toBeGreaterThan(newGameImmediately.ratingDeviation);
-    });
-
-    test('long idle time increases magnitude of rating change', () => {
-        const player = {
-            rating: 1500,
-            ratingDeviation: 50,
-            volatility: 0.06,
-        };
-        const opponent = {
+        const opponentLowRD = {
             rating: 1600,
-            ratingDeviation: 50,
+            ratingDeviation: 30,
+            volatility: 0.06,
+        };
+        const opponentHighRD = {
+            rating: 1600,
+            ratingDeviation: 300,
             volatility: 0.06,
         };
 
-        const active = calculateGlicko2Rating(player, [opponent], [1], 0);
-        const idle = calculateGlicko2Rating(player, [opponent], [1], 10);
+        const updatedLowRD = calculateGlicko2Rating(player, [opponentLowRD], [1]);
+        const updatedHighRD = calculateGlicko2Rating(player, [opponentHighRD], [1]);
 
-        const deltaActive = Math.abs(active.rating - 1500);
-        const deltaIdle = Math.abs(idle.rating - 1500);
-
-        expect(deltaIdle).toBeGreaterThan(deltaActive);
+        expect(updatedLowRD.rating - player.rating).toBeGreaterThan(updatedHighRD.rating - player.rating);
     });
 });

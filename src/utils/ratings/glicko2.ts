@@ -2,6 +2,8 @@ const tau = 0.5;
 const maxDeviation = 500;
 const minDeviation = 30;
 const maxVolatility = 0.1;
+const epsilon = 0.000001;
+const c = 0.02;
 
 export function calculateRatingDeviation(
     ratingDeviation: number,
@@ -9,7 +11,7 @@ export function calculateRatingDeviation(
     ratingPeriods: number,
 ): number {
     const phi = ratingDeviationToGlicko2Scale(ratingDeviation);
-    const phiStar = calculatePhiStar(phi, volatility, ratingPeriods);
+    const phiStar = inflateRatingDeviation(phi, volatility, ratingPeriods);
     return ratingDeviationFromGlicko2Scale(phiStar);
 }
 
@@ -29,7 +31,6 @@ export function expectedScore(
     player2: { rating: number; ratingDeviation: number },
 ): number {
     const mu1 = ratingToGlicko2Scale(player1.rating);
-    const phi1 = ratingDeviationToGlicko2Scale(player1.ratingDeviation);
     const mu2 = ratingToGlicko2Scale(player2.rating);
     const phi2 = ratingDeviationToGlicko2Scale(player2.ratingDeviation);
     return E(mu1, mu2, phi2);
@@ -40,7 +41,6 @@ export function calculateGlicko2Rating(
     player: PlayerRatingData,
     opponents: PlayerRatingData[],
     scores: (0 | 0.5 | 1)[],
-    ratingPeriods: number,
 ): PlayerRatingData {
     // Step 2
     const mu = ratingToGlicko2Scale(player.rating);
@@ -60,7 +60,7 @@ export function calculateGlicko2Rating(
     const newSigma = iterateVolatility(player.volatility, phi, delta, v);
 
     // Step 6, what the player's new rating deviation would be if they had not competed
-    const phiStar = calculatePhiStar(phi, newSigma, ratingPeriods);
+    const phiStar = inflateRatingDeviation(phi, newSigma);
 
     // Step 7, rating deviation after seeing results and new rating
     const newPhi = calculateNewPhi(phiStar, v);
@@ -71,6 +71,10 @@ export function calculateGlicko2Rating(
         ratingDeviation: clamp(ratingDeviationFromGlicko2Scale(newPhi), minDeviation, maxDeviation),
         volatility: clamp(newSigma, 0, maxVolatility),
     };
+}
+
+export function inflateRatingDeviation(phi: number, changeFactor: number, ratingPeriods = 1) {
+    return Math.sqrt(phi * phi + changeFactor * changeFactor * ratingPeriods);
 }
 
 function ratingToGlicko2Scale(rating: number) {
@@ -123,17 +127,6 @@ function calculateDelta(v: number, mu: number, opponents: Glicko2PlayerData[], s
     return v * sum;
 }
 
-const epsilon = 0.000001;
-
-function f(x: number, delta: number, v: number, phi: number, sigma: number) {
-    const a = Math.log(sigma * sigma);
-    const tempRes = phi * phi + v + Math.exp(x);
-    return (
-        (Math.exp(x) * (delta * delta - phi * phi - v - Math.exp(x))) / (2 * tempRes * tempRes) -
-        (x - a) / (tau * tau)
-    );
-}
-
 function iterateVolatility(sigma: number, phi: number, delta: number, v: number) {
     const a = Math.log(sigma * sigma);
     let A = a;
@@ -142,20 +135,20 @@ function iterateVolatility(sigma: number, phi: number, delta: number, v: number)
         B = Math.log(delta * delta - phi * phi - v);
     } else {
         let k = 1;
-        while (f(a - k * tau, delta, v, phi, sigma) < 0) {
+        while (f(a - k * tau, delta, v, phi, a) < 0) {
             k++;
         }
         B = a - k * tau;
     }
-    let fa = f(A, delta, v, phi, sigma);
-    let fb = f(B, delta, v, phi, sigma);
+    let fa = f(A, delta, v, phi, a);
+    let fb = f(B, delta, v, phi, a);
     let iterationCount = 0;
     while (Math.abs(A - B) > epsilon) {
         if (++iterationCount > 10000) {
             throw new Error('Iteration limit exceeded');
         }
         const C = A + (fa * (A - B)) / (fb - fa);
-        const fc = f(C, delta, v, phi, sigma);
+        const fc = f(C, delta, v, phi, a);
         if (fc * fb <= 0) {
             A = B;
             fa = fb;
@@ -168,8 +161,12 @@ function iterateVolatility(sigma: number, phi: number, delta: number, v: number)
     return Math.exp(A / 2);
 }
 
-function calculatePhiStar(phi: number, newSigma: number, ratingPeriods: number) {
-    return Math.sqrt(phi * phi + newSigma * newSigma * ratingPeriods);
+function f(x: number, delta: number, v: number, phi: number, a: number) {
+    const tempRes = phi * phi + v + Math.exp(x);
+    return (
+        (Math.exp(x) * (delta * delta - phi * phi - v - Math.exp(x))) / (2 * tempRes * tempRes) -
+        (x - a) / (tau * tau)
+    );
 }
 
 function calculateNewPhi(phiStar: number, v: number) {
