@@ -53,7 +53,9 @@ function League() {
                 <h2 className='text-lg'>Members</h2>
                 <ul>
                     {leagueInfo.members.map((member) => (
-                        <li key={member.id}>{member.name}</li>
+                        <li key={member.id}>
+                            {member.name}: {Math.round(member.glicko2_rating)}
+                        </li>
                     ))}
                 </ul>
                 <AddLeagueMemberForm onSubmit={handleAddLeagueMemberSubmit} />

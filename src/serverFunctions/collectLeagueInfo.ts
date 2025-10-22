@@ -15,7 +15,7 @@ export const collectLeagueInfo = createServerFn()
             db
                 .selectFrom('member')
                 .where('league_id', '=', leagueId)
-                .select(['id', 'name', 'joined_at'])
+                .select(['id', 'name', 'joined_at', 'glicko2_rating'])
                 .execute(),
             db
                 .selectFrom('match')

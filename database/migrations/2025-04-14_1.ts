@@ -17,7 +17,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn('name', 'varchar', (col) => col.notNull()) // TODO: Make name unique within a league
         .addColumn('joined_at', 'timestamp', (col) => col.notNull().defaultTo(sql`now()`))
         .addColumn('league_id', 'varchar', (col) => col.notNull().references('league.id').onDelete('cascade'))
-        .addColumn('glicko2_rating', 'double precision', (col) => col.defaultTo(1000))
+        .addColumn('glicko2_rating', 'double precision', (col) => col.defaultTo(1500))
         .addColumn('glicko2_rating_deviation', 'double precision', (col) => col.defaultTo(350))
         .addColumn('glicko2_volatility', 'double precision', (col) => col.defaultTo(0.06))
         .execute();
