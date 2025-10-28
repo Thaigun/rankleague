@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { calculateGlicko2Rating, calculateRatingDeviation, expectedScore } from '../glicko2';
+import { calculateGlicko2Rating, calculateRatingDeviation } from '../glicko2';
 
 describe('calculateRatingDeviation', () => {
     test('should increase monotonically', () => {
