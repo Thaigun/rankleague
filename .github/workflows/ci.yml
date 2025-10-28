@@ -2,8 +2,8 @@ name: CI Build and Push
 
 on:
     push:
-        branches:
-            - main
+        tags:
+            - '*'
 
 jobs:
     checks:
@@ -46,10 +46,18 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build Docker image
-              run: |
-                  docker build -f build.Dockerfile -t ghcr.io/thaigun/ranklig:latest .
+            - name: Extract tag name
+              id: get_tag
+              run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-            - name: Push Docker image
+            - name: Build Docker image with both tags
+              run: |
+                  docker build -f build.Dockerfile -t ghcr.io/thaigun/ranklig:${TAG} -t ghcr.io/thaigun/ranklig:latest .
+
+            - name: Push Docker image with tag
+              run: |
+                  docker push ghcr.io/thaigun/ranklig:${TAG}
+
+            - name: Push Docker image with latest
               run: |
                   docker push ghcr.io/thaigun/ranklig:latest
