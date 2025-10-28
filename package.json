@@ -3,12 +3,14 @@
     "type": "module",
     "scripts": {
         "build": "bun --bun vite build",
-        "check": "bun run typecheck && bun run prettier && bun run lint",
+        "check": "bun run typecheck && bun run prettier:check && bun run lint:check",
         "db": "docker compose up",
         "dev": "bun --bun vite dev",
         "lint": "bun --bun eslint . --fix",
+        "lint:check": "bun --bun eslint .",
         "migrate": "bun run --bun database/migrate.ts",
         "prettier": "prettier --write .",
+        "prettier:check": "prettier --check .",
         "seed": "bun run --bun database/seed.ts",
         "serve": "bun run --bun server.ts",
         "typecheck": "tsc --noEmit"
