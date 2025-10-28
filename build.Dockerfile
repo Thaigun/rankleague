@@ -15,5 +15,6 @@ COPY --from=builder /league/bun.lockb ./
 COPY --from=builder /league/node_modules ./node_modules
 COPY --from=builder /league/dist ./dist
 COPY --from=builder /league/server.ts ./
+COPY --from=builder /league/database ./database
 EXPOSE 3000
 CMD ["bun", "run", "serve"]
