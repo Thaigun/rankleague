@@ -10,7 +10,7 @@ if (!password) {
 
 const dialect = new PostgresDialect({
     pool: new Pool({
-        database: process.env.POSTGRES_DB || 'ranklig',
+        database: process.env.POSTGRES_DB || 'postgres',
         host: process.env.POSTGRES_HOST || 'localhost',
         port: 5432,
         user: process.env.POSTGRES_USER || 'postgres',
