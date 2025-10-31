@@ -4,6 +4,7 @@ import { addLeagueMemberFn } from '@src/serverFunctions/addLeagueMember';
 import { addMatchFn } from '@src/serverFunctions/addMatch';
 import { collectLeagueInfo } from '@src/serverFunctions/collectLeagueInfo';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { useMemo } from 'react';
 
 export const Route = createFileRoute('/_layout/league/$leagueId')({
     component: League,
@@ -17,6 +18,10 @@ function League() {
     const leagueInfo = Route.useLoaderData();
     const router = useRouter();
     const params = Route.useParams();
+
+    const sortedMembers = useMemo(() => {
+        return [...leagueInfo.members].sort((a, b) => b.glicko2_rating - a.glicko2_rating);
+    }, [leagueInfo.members]);
 
     const handleAddLeagueMemberSubmit = async (data: { memberName: string }) => {
         await addLeagueMemberFn({
@@ -52,7 +57,7 @@ function League() {
             <div className='flex flex-col gap-2'>
                 <h2 className='text-lg'>Members</h2>
                 <ul>
-                    {leagueInfo.members.map((member) => (
+                    {sortedMembers.map((member) => (
                         <li key={member.id}>
                             {member.name}: {Math.round(member.glicko2_rating)}
                         </li>
