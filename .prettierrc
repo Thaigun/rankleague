@@ -7,5 +7,5 @@
     "arrowParens": "always",
     "jsxSingleQuote": true,
     "plugins": ["prettier-plugin-tailwindcss"],
-    "tailwindStylesheet": "./app/styles/app.css"
+    "tailwindStylesheet": "./src/styles/app.css"
 }

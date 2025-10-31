@@ -46,7 +46,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
                 <HeadContent />
             </head>
             <body>
-                <div className='md:max-w-3/4 mx-auto w-full px-5'>{children}</div>
+                <div className='mx-auto w-full px-5 md:max-w-3/4'>{children}</div>
                 <Scripts />
             </body>
         </html>
