@@ -1,5 +1,6 @@
 import { AddLeagueMemberForm } from '@src/components/forms/AddLeagueMemberForm';
 import { AddMatchForm } from '@src/components/forms/AddMatchForm';
+import { MatchResult } from '@src/components/MatchResult';
 import { addLeagueMemberFn } from '@src/serverFunctions/addLeagueMember';
 import { addMatchFn } from '@src/serverFunctions/addMatch';
 import { collectLeagueInfo } from '@src/serverFunctions/collectLeagueInfo';
@@ -76,14 +77,21 @@ function League() {
                 {leagueInfo.members.length > 1 && (
                     <AddMatchForm members={leagueInfo.members} onSubmit={handleAddMatchSubmit} />
                 )}
-                <ul>
-                    {sortedMatches.map((match) => (
-                        <li key={match.match_id}>
-                            {match.member1_name} vs {match.member2_name}: {match.member1_score}-
-                            {match.member2_score} on {match.match_datetime.toString()}
-                        </li>
-                    ))}
-                </ul>
+
+                {sortedMatches.map((match) => (
+                    <MatchResult
+                        key={match.match_id}
+                        member1={{
+                            name: match.member1_name,
+                            score: match.member1_score,
+                        }}
+                        member2={{
+                            name: match.member2_name,
+                            score: match.member2_score,
+                        }}
+                        time={match.match_datetime}
+                    />
+                ))}
             </div>
         </div>
     );
