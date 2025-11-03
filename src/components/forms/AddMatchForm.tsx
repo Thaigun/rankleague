@@ -1,6 +1,6 @@
 import { SubmitButton } from '@src/components/buttons/SubmitButton';
 import { Form, Input, Label, Select } from '@src/components/Form';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 
 interface AddMatchFormProps {
     members: { id: number; name: string }[];
@@ -13,8 +13,12 @@ interface AddMatchFormProps {
 }
 
 export function AddMatchForm(props: AddMatchFormProps) {
-    const [member1Id, setMember1Id] = useState(props.members.at(0)?.id.toString() ?? '');
-    const [member2Id, setMember2Id] = useState(props.members.at(1)?.id.toString() ?? '');
+    const alphabeticalMembers = useMemo(() => {
+        return [...props.members].sort((a, b) => a.name.localeCompare(b.name));
+    }, [props.members]);
+
+    const [member1Id, setMember1Id] = useState(alphabeticalMembers.at(0)?.id.toString() ?? '');
+    const [member2Id, setMember2Id] = useState(alphabeticalMembers.at(1)?.id.toString() ?? '');
     const [member1Score, setMember1Score] = useState('');
     const [member2Score, setMember2Score] = useState('');
 
@@ -42,7 +46,7 @@ export function AddMatchForm(props: AddMatchFormProps) {
             <Label>
                 Player 1
                 <Select name='member1_id' value={member1Id} onChange={setMember1Id} required>
-                    {props.members.map((member) => (
+                    {alphabeticalMembers.map((member) => (
                         <option key={member.id} value={member.id}>
                             {member.name}
                         </option>
@@ -52,7 +56,7 @@ export function AddMatchForm(props: AddMatchFormProps) {
             <Label>
                 Player 2
                 <Select name='member2_id' value={member2Id} onChange={setMember2Id} required>
-                    {props.members.map((member) => (
+                    {alphabeticalMembers.map((member) => (
                         <option key={member.id} value={member.id}>
                             {member.name}
                         </option>
