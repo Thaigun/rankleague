@@ -19,12 +19,12 @@ export function MatchResult(props: MatchResultProps) {
     const formattedTime = time.toLocaleTimeString();
 
     return (
-        <div className='flex flex-row justify-between rounded-lg border border-gray-200 p-2 shadow-md'>
-            <div className='text-sm'>
+        <div className='flex flex-row flex-wrap justify-between rounded-lg border border-gray-200 p-2 shadow-md'>
+            <div className='px-1 text-sm'>
                 <span className={isWinner1 ? 'font-bold' : ''}>{member1.name}</span> {member1.score} -{' '}
                 {member2.score} <span className={isWinner2 ? 'font-bold' : ''}>{member2.name}</span>
             </div>
-            <div className='text-sm text-gray-500'>
+            <div className='px-1 text-sm text-gray-500'>
                 {formattedDate} {formattedTime}
             </div>
         </div>
