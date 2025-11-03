@@ -23,6 +23,12 @@ function League() {
         return [...leagueInfo.members].sort((a, b) => b.glicko2_rating - a.glicko2_rating);
     }, [leagueInfo.members]);
 
+    const sortedMatches = useMemo(() => {
+        return [...leagueInfo.matches].sort(
+            (a, b) => b.match_datetime.getTime() - a.match_datetime.getTime(),
+        );
+    }, [leagueInfo.matches]);
+
     const handleAddLeagueMemberSubmit = async (data: { memberName: string }) => {
         await addLeagueMemberFn({
             data: {
@@ -71,7 +77,7 @@ function League() {
                     <AddMatchForm members={leagueInfo.members} onSubmit={handleAddMatchSubmit} />
                 )}
                 <ul>
-                    {leagueInfo.matches.map((match) => (
+                    {sortedMatches.map((match) => (
                         <li key={match.match_id}>
                             {match.member1_name} vs {match.member2_name}: {match.member1_score}-
                             {match.member2_score} on {match.match_datetime.toString()}
