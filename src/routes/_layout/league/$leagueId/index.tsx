@@ -90,6 +90,8 @@ function League() {
                             score: match.member2_score,
                         }}
                         time={match.match_datetime}
+                        matchId={match.match_id}
+                        leagueId={params.leagueId}
                     />
                 ))}
             </div>

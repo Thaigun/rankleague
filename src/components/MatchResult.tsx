@@ -1,9 +1,12 @@
+import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 
 interface MatchResultProps {
     member1: MatchMember;
     member2: MatchMember;
     time: Date;
+    matchId: number;
+    leagueId: string;
 }
 
 interface MatchMember {
@@ -12,7 +15,7 @@ interface MatchMember {
 }
 
 export function MatchResult(props: MatchResultProps) {
-    const { member1, member2, time } = props;
+    const { member1, member2, time, matchId, leagueId } = props;
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -26,7 +29,11 @@ export function MatchResult(props: MatchResultProps) {
     const formattedTime = isClient ? time.toLocaleTimeString() : '';
 
     return (
-        <div className='flex flex-row flex-wrap justify-between rounded-lg border border-gray-200 p-2 shadow-md'>
+        <Link
+            to='/league/$leagueId/match/$matchId'
+            params={{ leagueId, matchId: matchId.toString() }}
+            className='flex flex-row flex-wrap justify-between rounded-lg border border-gray-200 p-2 shadow-md transition-colors hover:bg-slate-800'
+        >
             <div className='px-1 text-sm'>
                 <span className={isWinner1 ? 'font-bold' : ''}>{member1.name}</span> {member1.score} -{' '}
                 {member2.score} <span className={isWinner2 ? 'font-bold' : ''}>{member2.name}</span>
@@ -34,6 +41,6 @@ export function MatchResult(props: MatchResultProps) {
             <div className='px-1 text-sm text-gray-500'>
                 {formattedDate} {formattedTime}
             </div>
-        </div>
+        </Link>
     );
 }

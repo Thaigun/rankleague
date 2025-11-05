@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root';
 import { Route as LayoutRouteImport } from './routes/_layout';
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index';
 import { Route as LayoutLeagueLeagueIdIndexRouteImport } from './routes/_layout/league/$leagueId/index';
+import { Route as LayoutLeagueLeagueIdMatchMatchIdRouteImport } from './routes/_layout/league/$leagueId/match/$matchId';
 
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
@@ -28,27 +29,41 @@ const LayoutLeagueLeagueIdIndexRoute =
     path: '/league/$leagueId/',
     getParentRoute: () => LayoutRoute,
   } as any);
+const LayoutLeagueLeagueIdMatchMatchIdRoute =
+  LayoutLeagueLeagueIdMatchMatchIdRouteImport.update({
+    id: '/league/$leagueId/match/$matchId',
+    path: '/league/$leagueId/match/$matchId',
+    getParentRoute: () => LayoutRoute,
+  } as any);
 
 export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute;
   '/league/$leagueId': typeof LayoutLeagueLeagueIdIndexRoute;
+  '/league/$leagueId/match/$matchId': typeof LayoutLeagueLeagueIdMatchMatchIdRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof LayoutIndexRoute;
   '/league/$leagueId': typeof LayoutLeagueLeagueIdIndexRoute;
+  '/league/$leagueId/match/$matchId': typeof LayoutLeagueLeagueIdMatchMatchIdRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/_layout': typeof LayoutRouteWithChildren;
   '/_layout/': typeof LayoutIndexRoute;
   '/_layout/league/$leagueId/': typeof LayoutLeagueLeagueIdIndexRoute;
+  '/_layout/league/$leagueId/match/$matchId': typeof LayoutLeagueLeagueIdMatchMatchIdRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/league/$leagueId';
+  fullPaths: '/' | '/league/$leagueId' | '/league/$leagueId/match/$matchId';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/league/$leagueId';
-  id: '__root__' | '/_layout' | '/_layout/' | '/_layout/league/$leagueId/';
+  to: '/' | '/league/$leagueId' | '/league/$leagueId/match/$matchId';
+  id:
+    | '__root__'
+    | '/_layout'
+    | '/_layout/'
+    | '/_layout/league/$leagueId/'
+    | '/_layout/league/$leagueId/match/$matchId';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
@@ -78,17 +93,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutLeagueLeagueIdIndexRouteImport;
       parentRoute: typeof LayoutRoute;
     };
+    '/_layout/league/$leagueId/match/$matchId': {
+      id: '/_layout/league/$leagueId/match/$matchId';
+      path: '/league/$leagueId/match/$matchId';
+      fullPath: '/league/$leagueId/match/$matchId';
+      preLoaderRoute: typeof LayoutLeagueLeagueIdMatchMatchIdRouteImport;
+      parentRoute: typeof LayoutRoute;
+    };
   }
 }
 
 interface LayoutRouteChildren {
   LayoutIndexRoute: typeof LayoutIndexRoute;
   LayoutLeagueLeagueIdIndexRoute: typeof LayoutLeagueLeagueIdIndexRoute;
+  LayoutLeagueLeagueIdMatchMatchIdRoute: typeof LayoutLeagueLeagueIdMatchMatchIdRoute;
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutIndexRoute: LayoutIndexRoute,
   LayoutLeagueLeagueIdIndexRoute: LayoutLeagueLeagueIdIndexRoute,
+  LayoutLeagueLeagueIdMatchMatchIdRoute: LayoutLeagueLeagueIdMatchMatchIdRoute,
 };
 
 const LayoutRouteWithChildren =
