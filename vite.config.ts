@@ -9,5 +9,15 @@ export default defineConfig({
         port: 3000,
         strictPort: true,
     },
-    plugins: [tsConfigPaths(), tailwindcss(), tanstackStart(), viteReact()],
+    plugins: [
+        tsConfigPaths(),
+        tailwindcss(),
+        tanstackStart({
+            router: {
+                semicolons: true,
+                quoteStyle: 'single',
+            },
+        }),
+        viteReact(),
+    ],
 });
