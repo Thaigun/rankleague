@@ -1,5 +1,6 @@
+import { NavigateBackLink } from '@src/components/NavigateBackLink';
 import { collectMatchInfo } from '@src/serverFunctions/collectMatchInfo';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_layout/league/$leagueId/match/$matchId')({
     component: Match,
@@ -19,13 +20,11 @@ function Match() {
 
     return (
         <div>
-            <Link
+            <NavigateBackLink
                 to='/league/$leagueId'
                 params={{ leagueId: params.leagueId }}
-                className='text-sm text-gray-200 hover:underline'
-            >
-                Back to League
-            </Link>
+                label='Back to League'
+            />
             <h1>Match Details</h1>
             <p>League ID: {params.leagueId}</p>
             <p>Match ID: {params.matchId}</p>
