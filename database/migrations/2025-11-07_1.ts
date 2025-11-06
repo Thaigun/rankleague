@@ -15,7 +15,10 @@ export async function up(db: Kysely<any>): Promise<void> {
         )
         .execute();
 
-    const members = await db.selectFrom('member').select('id').execute();
+    const members = await db
+        .selectFrom('member')
+        .select(['id', 'glicko2_rating', 'glicko2_rating_deviation', 'glicko2_volatility'])
+        .execute();
     const memberRatings = members.reduce<
         Map<
             number,
@@ -105,6 +108,26 @@ export async function up(db: Kysely<any>): Promise<void> {
             glicko2_volatility: player2NewRating.volatility,
             lastPlayed: match.datetime,
         });
+    }
+    // Validate that calculated ratings match current member ratings
+    for (const member of members) {
+        const calculatedRating = memberRatings.get(member.id);
+        if (!calculatedRating) {
+            throw new Error(`Member ${member.id} not found in calculated ratings`);
+        }
+
+        const ratingDiff = Math.abs(member.glicko2_rating - calculatedRating.glicko2_rating);
+        const deviationDiff = Math.abs(
+            member.glicko2_rating_deviation - calculatedRating.glicko2_rating_deviation,
+        );
+        const volatilityDiff = Math.abs(member.glicko2_volatility - calculatedRating.glicko2_volatility);
+
+        if (ratingDiff > 0.01 || deviationDiff > 0.01 || volatilityDiff > 0.001) {
+            throw new Error(
+                `Rating mismatch for member ${member.id}: ` +
+                    `rating diff=${ratingDiff}, deviation diff=${deviationDiff}, volatility diff=${volatilityDiff}`,
+            );
+        }
     }
 }
 
