@@ -78,7 +78,7 @@ export const addMatchFn = createServerFn({ method: 'POST' })
                     now,
                 );
 
-                await Promise.all([
+                const [matchInsertResult] = await Promise.all([
                     trx
                         .insertInto('match')
                         .values({
@@ -87,6 +87,7 @@ export const addMatchFn = createServerFn({ method: 'POST' })
                             member1_score: member1Score,
                             member2_score: member2Score,
                         })
+                        .returning('id')
                         .execute(),
                     trx
                         .updateTable('member')
@@ -107,5 +108,28 @@ export const addMatchFn = createServerFn({ method: 'POST' })
                         .where('id', '=', member2Id)
                         .execute(),
                 ]);
+                const matchId = matchInsertResult.at(0)?.id;
+                if (matchId === undefined) {
+                    throw new Error('Failed to insert match, insert returned undefined id');
+                }
+                await trx
+                    .insertInto('rating_history')
+                    .values([
+                        {
+                            member_id: member1Id,
+                            glicko2_rating: updatedPlayer1.rating,
+                            glicko2_rating_deviation: updatedPlayer1.ratingDeviation,
+                            glicko2_volatility: updatedPlayer1.volatility,
+                            after_match_id: matchId,
+                        },
+                        {
+                            member_id: member2Id,
+                            glicko2_rating: updatedPlayer2.rating,
+                            glicko2_rating_deviation: updatedPlayer2.ratingDeviation,
+                            glicko2_volatility: updatedPlayer2.volatility,
+                            after_match_id: matchId,
+                        },
+                    ])
+                    .execute();
             });
     });

@@ -4,6 +4,7 @@ export interface Database {
     member: MemberTable;
     league: LeagueTable;
     match: MatchTable;
+    rating_history: RatingHistoryTable;
 }
 
 interface MemberTable {
@@ -41,3 +42,15 @@ interface MatchTable {
 export type Match = Selectable<MatchTable>;
 export type MatchInsert = Insertable<MatchTable>;
 export type MatchUpdate = Updateable<MatchTable>;
+
+interface RatingHistoryTable {
+    id: GeneratedAlways<number>;
+    member_id: number;
+    glicko2_rating: number;
+    glicko2_rating_deviation: number;
+    glicko2_volatility: number;
+    after_match_id: number;
+}
+export type RatingHistory = Selectable<RatingHistoryTable>;
+export type RatingHistoryInsert = Insertable<RatingHistoryTable>;
+export type RatingHistoryUpdate = Updateable<RatingHistoryTable>;
