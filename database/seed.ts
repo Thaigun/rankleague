@@ -1,5 +1,6 @@
 import { db } from './db';
 import { migrator } from './migrator';
+import { addNewMatch } from '@src/serverFunctions/serverUtils/addNewMatch';
 
 const migrationResult = await migrator.migrateToLatest();
 console.log('Migration result:', migrationResult);
@@ -52,41 +53,42 @@ if (existingMembers.length === 0) {
     console.log('Inserted test members:', insertResult);
 }
 
-const members = await db
-    .selectFrom('member')
-    .where('league_id', '=', 'test1')
-    .select(['id', 'name'])
-    .execute();
 const existingMatches = await db.selectFrom('match').selectAll().execute();
 if (existingMatches.length === 0) {
+    const members = await db
+        .selectFrom('member')
+        .where('league_id', '=', 'test1')
+        .select(['id', 'name'])
+        .execute();
     const memberMap = Object.fromEntries(members.map((m) => [m.name, m.id]));
 
-    const insertResult = await db
-        .insertInto('match')
-        .values([
-            { member1_id: memberMap.Alice, member2_id: memberMap.Bob, member1_score: 3, member2_score: 1 },
-            { member1_id: memberMap.Alice, member2_id: memberMap.Bob, member1_score: 2, member2_score: 3 },
-            {
-                member1_id: memberMap.Alice,
-                member2_id: memberMap.Charlie,
-                member1_score: 3,
-                member2_score: 0,
-            },
-            { member1_id: memberMap.Bob, member2_id: memberMap.Charlie, member1_score: 1, member2_score: 3 },
-            { member1_id: memberMap.Bob, member2_id: memberMap.Charlie, member1_score: 3, member2_score: 2 },
-            { member1_id: memberMap.Diana, member2_id: memberMap.Eve, member1_score: 3, member2_score: 1 },
-            { member1_id: memberMap.Diana, member2_id: memberMap.Eve, member1_score: 2, member2_score: 3 },
-            { member1_id: memberMap.Diana, member2_id: memberMap.Eve, member1_score: 3, member2_score: 2 },
-            { member1_id: memberMap.Frank, member2_id: memberMap.Alice, member1_score: 1, member2_score: 3 },
-            { member1_id: memberMap.Frank, member2_id: memberMap.Bob, member1_score: 3, member2_score: 0 },
-            {
-                member1_id: memberMap.Charlie,
-                member2_id: memberMap.Diana,
-                member1_score: 2,
-                member2_score: 3,
-            },
-            { member1_id: memberMap.Eve, member2_id: memberMap.Frank, member1_score: 3, member2_score: 1 },
-        ])
-        .execute();
-    console.log('Inserted test matches:', insertResult);
+    const matches = [
+        { member1Id: memberMap.Alice, member2Id: memberMap.Bob, member1Score: 3, member2Score: 1 },
+        { member1Id: memberMap.Alice, member2Id: memberMap.Bob, member1Score: 2, member2Score: 3 },
+        {
+            member1Id: memberMap.Alice,
+            member2Id: memberMap.Charlie,
+            member1Score: 3,
+            member2Score: 0,
+        },
+        { member1Id: memberMap.Bob, member2Id: memberMap.Charlie, member1Score: 1, member2Score: 3 },
+        { member1Id: memberMap.Bob, member2Id: memberMap.Charlie, member1Score: 3, member2Score: 2 },
+        { member1Id: memberMap.Diana, member2Id: memberMap.Eve, member1Score: 3, member2Score: 1 },
+        { member1Id: memberMap.Diana, member2Id: memberMap.Eve, member1Score: 2, member2Score: 3 },
+        { member1Id: memberMap.Diana, member2Id: memberMap.Eve, member1Score: 3, member2Score: 2 },
+        { member1Id: memberMap.Frank, member2Id: memberMap.Alice, member1Score: 1, member2Score: 3 },
+        { member1Id: memberMap.Frank, member2Id: memberMap.Bob, member1Score: 3, member2Score: 0 },
+        {
+            member1Id: memberMap.Charlie,
+            member2Id: memberMap.Diana,
+            member1Score: 2,
+            member2Score: 3,
+        },
+        { member1Id: memberMap.Eve, member2Id: memberMap.Frank, member1Score: 3, member2Score: 1 },
+    ];
+
+    for (const match of matches) {
+        await addNewMatch(match);
+    }
+    console.log('Inserted test matches with ratings');
 }
