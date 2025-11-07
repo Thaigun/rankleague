@@ -1,3 +1,5 @@
+name: ranklig-development-database
+
 services:
     database:
         image: postgres:alpine
