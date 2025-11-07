@@ -1,7 +1,7 @@
 {
     "name": "elo-league",
     "type": "module",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "scripts": {
         "build": "bun --bun vite build",
         "check": "bun run typecheck && bun run prettier:check && bun run lint:check",
