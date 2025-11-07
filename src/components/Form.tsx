@@ -18,17 +18,32 @@ export function Label(props: LabelProps) {
     return <label className='flex flex-col items-start gap-1 text-sm'>{props.children}</label>;
 }
 
-interface InputProps {
+type InputPropsBase = {
     name: string;
-    type?: 'text' | 'number' | 'password';
     required?: boolean;
+};
+
+type TextInputProps = InputPropsBase & {
+    type?: 'text' | 'password';
     value: string;
     onChange: (val: string) => void;
-}
+};
+
+type NumberInputProps = InputPropsBase & {
+    type: 'number';
+    value: number;
+    onChange: (val: number) => void;
+};
+
+type InputProps = TextInputProps | NumberInputProps;
 
 export function Input(props: InputProps) {
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        props.onChange(e.target.value);
+        if (props.type === 'number') {
+            props.onChange(e.target.valueAsNumber);
+        } else {
+            props.onChange(e.target.value);
+        }
     }
 
     return (
