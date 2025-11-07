@@ -5,14 +5,14 @@ import { authMiddleware } from '@src/middleware/authMiddleware';
 import { setCookieWithLeagues } from './serverUtils/authTokenUtils';
 import { zodValidator } from '@tanstack/zod-adapter';
 
-const joinLeagueFnSchema = z.object({
+const joinLeagueSchema = z.object({
     leagueId: z.string(),
     leaguePassword: z.string(),
 });
 
 export const joinLeagueFn = createServerFn({ method: 'POST' })
     .middleware([authMiddleware])
-    .inputValidator(zodValidator(joinLeagueFnSchema))
+    .inputValidator(zodValidator(joinLeagueSchema))
     .handler(async ({ data, context }) => {
         if (context.auth?.leagues?.includes(data.leagueId)) {
             throw new Error('Already a member of this league');

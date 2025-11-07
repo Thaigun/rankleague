@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { leagueMembershipMiddleware } from '@src/middleware/leagueMembershipMiddleware';
 import { db } from '@database/db';
 
-export const collectLeagueInfo = createServerFn()
+export const collectLeagueInfoFn = createServerFn()
     .middleware([leagueMembershipMiddleware])
     .handler(async ({ data }) => {
         const leagueId = data.leagueId;

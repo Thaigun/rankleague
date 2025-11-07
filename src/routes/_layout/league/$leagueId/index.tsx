@@ -3,7 +3,7 @@ import { AddMatchForm } from '@src/components/forms/AddMatchForm';
 import { MatchResult } from '@src/components/MatchResult';
 import { addLeagueMemberFn } from '@src/serverFunctions/addLeagueMember';
 import { addMatchFn } from '@src/serverFunctions/addMatch';
-import { collectLeagueInfo } from '@src/serverFunctions/collectLeagueInfo';
+import { collectLeagueInfoFn } from '@src/serverFunctions/collectLeagueInfo';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { useMemo } from 'react';
 
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_layout/league/$leagueId/')({
     component: League,
     loader: async ({ params }) => {
         const leagueId = params.leagueId;
-        return collectLeagueInfo({ data: { leagueId } });
+        return collectLeagueInfoFn({ data: { leagueId } });
     },
 });
 

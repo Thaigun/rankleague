@@ -5,7 +5,7 @@ import { authMiddleware } from '@src/middleware/authMiddleware';
 import { setCookieWithLeagues } from './serverUtils/authTokenUtils';
 import { zodValidator } from '@tanstack/zod-adapter';
 
-const createLeagueFnSchema = z.object({
+const createLeagueSchema = z.object({
     leagueName: z.string(),
     leagueDescription: z.string(),
     leagueId: z.string(),
@@ -14,7 +14,7 @@ const createLeagueFnSchema = z.object({
 
 export const createLeagueFn = createServerFn({ method: 'POST' })
     .middleware([authMiddleware])
-    .inputValidator(zodValidator(createLeagueFnSchema))
+    .inputValidator(zodValidator(createLeagueSchema))
     .handler(async ({ data, context }) => {
         const hashedPassword = await Bun.password.hash(data.leaguePassword);
         await db

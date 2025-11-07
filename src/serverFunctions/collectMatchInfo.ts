@@ -9,7 +9,7 @@ const collectMatchInfoSchema = z.object({
     matchId: z.number(),
 });
 
-export const collectMatchInfo = createServerFn()
+export const collectMatchInfoFn = createServerFn()
     .middleware([leagueMembershipMiddleware])
     .inputValidator(zodValidator(collectMatchInfoSchema))
     .handler(async ({ data }) => {

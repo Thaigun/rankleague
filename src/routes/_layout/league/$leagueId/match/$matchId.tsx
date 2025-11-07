@@ -1,5 +1,5 @@
 import { NavigateBackLink } from '@src/components/NavigateBackLink';
-import { collectMatchInfo } from '@src/serverFunctions/collectMatchInfo';
+import { collectMatchInfoFn } from '@src/serverFunctions/collectMatchInfo';
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_layout/league/$leagueId/match/$matchId')
         if (isNaN(matchId)) {
             throw new Error('Match ID must be a number', { cause: params.matchId });
         }
-        return collectMatchInfo({ data: { matchId, leagueId } });
+        return collectMatchInfoFn({ data: { matchId, leagueId } });
     },
 });
 
