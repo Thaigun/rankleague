@@ -70,10 +70,10 @@ export const collectMatchInfo = createServerFn()
 
         // Find the rating history entries for each member after this match
         const member1AfterMatch = matchRatingHistories.find(
-            (history) => history.member_id === matchInfo.member1_id
+            (history) => history.member_id === matchInfo.member1_id,
         );
         const member2AfterMatch = matchRatingHistories.find(
-            (history) => history.member_id === matchInfo.member2_id
+            (history) => history.member_id === matchInfo.member2_id,
         );
 
         if (!member1AfterMatch || !member2AfterMatch) {

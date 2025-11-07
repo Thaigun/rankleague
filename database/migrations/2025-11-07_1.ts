@@ -1,7 +1,9 @@
 import { applyMatchResult } from '@src/utils/ratings/continuouslyUpdatedGlicko2';
 import { Kysely } from 'kysely';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable('rating_history')
@@ -131,7 +133,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function down(db: Kysely<any>): Promise<void> {
     await db.schema.dropTable('rating_history').execute();
 }
