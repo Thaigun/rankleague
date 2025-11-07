@@ -1,6 +1,7 @@
 import { NavigateBackLink } from '@src/components/NavigateBackLink';
 import { collectMatchInfo } from '@src/serverFunctions/collectMatchInfo';
 import { createFileRoute } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 
 export const Route = createFileRoute('/_layout/league/$leagueId/match/$matchId')({
     component: Match,
@@ -17,6 +18,14 @@ export const Route = createFileRoute('/_layout/league/$leagueId/match/$matchId')
 function Match() {
     const matchInfo = Route.useLoaderData();
     const params = Route.useParams();
+    const [formattedDate, setFormattedDate] = useState('');
+
+    const member1RatingChange = matchInfo.member1.newRating - matchInfo.member1.previousRating;
+    const member2RatingChange = matchInfo.member2.newRating - matchInfo.member2.previousRating;
+
+    useEffect(() => {
+        setFormattedDate(new Date(matchInfo.match.datetime).toLocaleString());
+    }, [matchInfo.match.datetime]);
 
     return (
         <div>
@@ -26,10 +35,33 @@ function Match() {
                 label='Back to League'
             />
             <h1>Match Details</h1>
-            <p>League ID: {params.leagueId}</p>
-            <p>Match ID: {params.matchId}</p>
-            <p>Member 1: {matchInfo.member1.name}</p>
-            <p>Member 2: {matchInfo.member2.name}</p>
+            <p>Date: {formattedDate}</p>
+            <p>
+                Score: {matchInfo.match.member1_score} - {matchInfo.match.member2_score}
+            </p>
+
+            <h2>Players</h2>
+            <div>
+                <h3>{matchInfo.member1.name}</h3>
+                <p>Score: {matchInfo.match.member1_score}</p>
+                <p>Previous Rating: {matchInfo.member1.previousRating.toFixed(0)}</p>
+                <p>New Rating: {matchInfo.member1.newRating.toFixed(0)}</p>
+                <p>
+                    Change: {member1RatingChange > 0 ? '+' : ''}
+                    {member1RatingChange.toFixed(0)}
+                </p>
+            </div>
+
+            <div>
+                <h3>{matchInfo.member2.name}</h3>
+                <p>Score: {matchInfo.match.member2_score}</p>
+                <p>Previous Rating: {matchInfo.member2.previousRating.toFixed(0)}</p>
+                <p>New Rating: {matchInfo.member2.newRating.toFixed(0)}</p>
+                <p>
+                    Change: {member2RatingChange > 0 ? '+' : ''}
+                    {member2RatingChange.toFixed(0)}
+                </p>
+            </div>
         </div>
     );
 }
