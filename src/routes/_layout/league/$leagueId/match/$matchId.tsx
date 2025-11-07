@@ -28,21 +28,21 @@ function Match() {
     }, [matchInfo.match.datetime]);
 
     return (
-        <div>
+        <div className='flex flex-col gap-2'>
             <NavigateBackLink
                 to='/league/$leagueId'
                 params={{ leagueId: params.leagueId }}
                 label='Back to League'
             />
-            <h1>Match Details</h1>
+            <h1 className='text-xl'>Match Details</h1>
             <p>Date: {formattedDate}</p>
             <p>
                 Score: {matchInfo.match.member1_score} - {matchInfo.match.member2_score}
             </p>
 
-            <h2>Players</h2>
+            <h2 className='text-lg'>Players</h2>
             <div>
-                <h3>{matchInfo.member1.name}</h3>
+                <h3 className='text-md'>{matchInfo.member1.name}</h3>
                 <p>Score: {matchInfo.match.member1_score}</p>
                 <p>Previous Rating: {matchInfo.member1.previousRating.toFixed(0)}</p>
                 <p>New Rating: {matchInfo.member1.newRating.toFixed(0)}</p>
@@ -53,7 +53,7 @@ function Match() {
             </div>
 
             <div>
-                <h3>{matchInfo.member2.name}</h3>
+                <h3 className='text-md'>{matchInfo.member2.name}</h3>
                 <p>Score: {matchInfo.match.member2_score}</p>
                 <p>Previous Rating: {matchInfo.member2.previousRating.toFixed(0)}</p>
                 <p>New Rating: {matchInfo.member2.newRating.toFixed(0)}</p>
