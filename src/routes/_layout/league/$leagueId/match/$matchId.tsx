@@ -1,7 +1,11 @@
+import { EditButton } from '@src/components/buttons/EditButton';
+import { SaveButton } from '@src/components/buttons/SaveButton';
+import { Input } from '@src/components/Form';
 import { NavigateBackLink } from '@src/components/NavigateBackLink';
 import { collectMatchInfoFn } from '@src/serverFunctions/collectMatchInfo';
-import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { editMatchScoreFn } from '@src/serverFunctions/editMatchScore';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { useCallback, useEffect, useState } from 'react';
 
 export const Route = createFileRoute('/_layout/league/$leagueId/match/$matchId')({
     component: Match,
@@ -18,7 +22,11 @@ export const Route = createFileRoute('/_layout/league/$leagueId/match/$matchId')
 function Match() {
     const matchInfo = Route.useLoaderData();
     const params = Route.useParams();
+    const router = useRouter();
     const [formattedDate, setFormattedDate] = useState('');
+    const [scoreEditMode, setScoreEditMode] = useState(false);
+    const [member1EditedScore, setMember1EditedScore] = useState(matchInfo.match.member1_score);
+    const [member2EditedScore, setMember2EditedScore] = useState(matchInfo.match.member2_score);
 
     const member1RatingChange = matchInfo.member1.newRating - matchInfo.member1.previousRating;
     const member2RatingChange = matchInfo.member2.newRating - matchInfo.member2.previousRating;
@@ -26,6 +34,25 @@ function Match() {
     useEffect(() => {
         setFormattedDate(new Date(matchInfo.match.datetime).toLocaleString());
     }, [matchInfo.match.datetime]);
+
+    const handleScoreSave = useCallback(async () => {
+        await editMatchScoreFn({
+            data: {
+                leagueId: params.leagueId,
+                matchId: matchInfo.match.id,
+                member1Score: member1EditedScore,
+                member2Score: member2EditedScore,
+            },
+        });
+        setScoreEditMode(false);
+        await router.invalidate();
+    }, [
+        member1EditedScore,
+        member2EditedScore,
+        matchInfo.match.id,
+        matchInfo.match.member1_score,
+        matchInfo.match.member2_score,
+    ]);
 
     return (
         <div className='flex flex-col gap-2'>
@@ -36,9 +63,34 @@ function Match() {
             />
             <h1 className='text-xl'>Match Details</h1>
             <p>Date: {formattedDate}</p>
-            <p>
-                Score: {matchInfo.match.member1_score} - {matchInfo.match.member2_score}
-            </p>
+            <div className='flex flex-row items-center gap-2'>
+                {scoreEditMode ? (
+                    <>
+                        <p>Score: </p>
+                        <Input
+                            type='number'
+                            name='member1_score'
+                            value={member1EditedScore}
+                            onChange={setMember1EditedScore}
+                        />
+                        <span>-</span>
+                        <Input
+                            type='number'
+                            name='member2_score'
+                            value={member2EditedScore}
+                            onChange={setMember2EditedScore}
+                        />
+                        <SaveButton onClick={() => void handleScoreSave()} />
+                    </>
+                ) : (
+                    <>
+                        <p>
+                            Score: {matchInfo.match.member1_score} - {matchInfo.match.member2_score}
+                        </p>
+                        <EditButton onClick={() => setScoreEditMode(true)} />
+                    </>
+                )}
+            </div>
 
             <h2 className='text-lg'>Players</h2>
             <div>

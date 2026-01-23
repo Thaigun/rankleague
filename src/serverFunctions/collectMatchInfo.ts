@@ -25,20 +25,14 @@ export const collectMatchInfoFn = createServerFn()
             throw new Error('Match not found');
         }
 
-        const [member1, member2, matchRatingHistories, member1PreviousMatch, member2PreviousMatch] =
-            await Promise.all([
+        const [members, matchRatingHistories, member1PreviousMatch, member2PreviousMatch] = await Promise.all(
+            [
                 db
                     .selectFrom('member')
-                    .where('id', '=', matchInfo.member1_id)
+                    .where('id', 'in', [matchInfo.member1_id, matchInfo.member2_id])
                     .where('league_id', '=', leagueId)
                     .select(['id', 'name'])
-                    .executeTakeFirst(),
-                db
-                    .selectFrom('member')
-                    .where('id', '=', matchInfo.member2_id)
-                    .where('league_id', '=', leagueId)
-                    .select(['id', 'name'])
-                    .executeTakeFirst(),
+                    .execute(),
                 db
                     .selectFrom('rating_history')
                     .where('after_match_id', '=', matchId)
@@ -62,13 +56,16 @@ export const collectMatchInfoFn = createServerFn()
                     .limit(1)
                     .select('rating_history.glicko2_rating')
                     .executeTakeFirst(),
-            ]);
+            ],
+        );
+
+        const member1 = members.find((m) => m.id === matchInfo.member1_id);
+        const member2 = members.find((m) => m.id === matchInfo.member2_id);
 
         if (!member1 || !member2) {
             throw new Error('One or both members not found in the specified league');
         }
 
-        // Find the rating history entries for each member after this match
         const member1AfterMatch = matchRatingHistories.find(
             (history) => history.member_id === matchInfo.member1_id,
         );
@@ -80,7 +77,6 @@ export const collectMatchInfoFn = createServerFn()
             throw new Error('Rating history not found for this match');
         }
 
-        // Use default rating of 1500 if no previous match exists
         const DEFAULT_RATING = 1500;
         const member1PreviousRating = member1PreviousMatch?.glicko2_rating ?? DEFAULT_RATING;
         const member2PreviousRating = member2PreviousMatch?.glicko2_rating ?? DEFAULT_RATING;

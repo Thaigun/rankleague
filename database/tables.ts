@@ -5,6 +5,7 @@ export interface Database {
     league: LeagueTable;
     match: MatchTable;
     rating_history: RatingHistoryTable;
+    match_edit: MatchEditTable;
 }
 
 interface MemberTable {
@@ -38,6 +39,8 @@ interface MatchTable {
     member1_score: number;
     member2_score: number;
     datetime: GeneratedAlways<Date>;
+    edited_at: Date | null;
+    removed_at: Date | null;
 }
 export type Match = Selectable<MatchTable>;
 export type MatchInsert = Insertable<MatchTable>;
@@ -54,3 +57,14 @@ interface RatingHistoryTable {
 export type RatingHistory = Selectable<RatingHistoryTable>;
 export type RatingHistoryInsert = Insertable<RatingHistoryTable>;
 export type RatingHistoryUpdate = Updateable<RatingHistoryTable>;
+
+interface MatchEditTable {
+    id: GeneratedAlways<number>;
+    match_id: number;
+    datetime: GeneratedAlways<Date>;
+    previous_member1_score: number;
+    previous_member2_score: number;
+}
+export type MatchEdit = Selectable<MatchEditTable>;
+export type MatchEditInsert = Insertable<MatchEditTable>;
+export type MatchEditUpdate = Updateable<MatchEditTable>;
